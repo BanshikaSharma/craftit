@@ -1,0 +1,3565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Craft It - Tech Student Platform</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+    --primary: #00d9ff;
+    --primary-dark: #0099cc;
+    --primary-light: #66e4ff;
+    --secondary: #ff2e63;
+    --accent: #ffd700;
+    --danger: #ff4444;
+    --dark: #0a0e27;
+    --darker: #050814;
+    --light: #e8f0ff;
+    --gray-50: #1a1f3a;
+    --gray-100: #2a2f4a;
+    --gray-200: #3a3f5a;
+    --gray-300: #4a4f6a;
+    --gray-400: #6a6f8a;
+    --gray-500: #8a8faa;
+    --gray-600: #aaaac5;
+    --gray-700: #cacadf;
+    --gray-800: #eaeaff;
+    --success: #00ff88;
+    --warning: #ffaa00;
+    --info: #00ddff;
+    --whatsapp: #25D366;
+    --other: #3c27b0;
+    --form: #dc3545;
+    --card-shadow: 0 20px 40px -15px rgba(0, 217, 255, 0.2);
+    --hover-shadow: 0 30px 50px -20px rgba(0, 217, 255, 0.4);
+    --glow: 0 0 15px rgba(0, 217, 255, 0.5);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+            overflow-x: hidden;
+        }
+
+        /* Tech Grid Background */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Circuit Animation */
+        .circuit-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .circuit-lines svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 10;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.3);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--glow);
+        }
+
+        .logo-icon i {
+            font-size: 1.8rem;
+            color: var(--dark);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            background: var(--secondary);
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            color: white;
+            margin-left: 0.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary);
+            background: rgba(0, 217, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-menu a.active {
+            color: var(--primary);
+            background: rgba(0, 217, 255, 0.15);
+            box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
+        }
+
+        .student-badge {
+            background: rgba(0, 217, 255, 0.15);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--primary);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+        }
+
+        /* WhatsApp Button in Header */
+        .whatsapp-header-btn {
+            background: var(--whatsapp);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .whatsapp-header-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.5);
+        }
+
+        /* Form Link Button in Header */
+        .form-header-btn {
+            background: var(--form);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+            position: relative;
+        }
+
+        .form-header-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(220, 53, 69, 0.5);
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        /* Creator Contact Bar */
+        .creator-contact {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: var(--dark);
+            padding: 0.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .creator-contact i {
+            margin-right: 0.5rem;
+            color: var(--dark);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .hero-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+        }
+
+        .hero-section .highlight {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-section p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+            color: var(--gray-500);
+        }
+
+        .student-offer {
+            display: inline-block;
+            background: rgba(0, 217, 255, 0.15);
+            padding: 0.5rem 2rem;
+            border-radius: 50px;
+            margin-top: 1.5rem;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            color: var(--primary);
+        }
+
+        .student-offer:hover {
+            background: rgba(0, 217, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .progress-container::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(0, 217, 255, 0.3);
+            z-index: 1;
+        }
+
+        .progress-step {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1a1f3a 0%, #0a0e27 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-number {
+            background: var(--primary);
+            color: var(--dark);
+            border-color: var(--primary-light);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+        }
+
+        .step-label {
+            color: var(--gray-500);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(26, 31, 58, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: var(--card-shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        .card-header i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .card-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .card-header p {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+        }
+
+        /* Steps Container */
+        .steps-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--gray-600);
+        }
+
+        .form-group label i {
+            color: var(--primary);
+            margin-right: 0.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
+        }
+
+        .form-control::placeholder {
+            color: var(--gray-500);
+        }
+
+        .form-control.error {
+            border-color: var(--danger);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%2366e4ff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+            background-position: right 1rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Custom Dropdown Styles */
+        .custom-dropdown {
+            position: relative;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .dropdown-button {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: white;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-button:hover {
+            border-color: var(--primary);
+        }
+
+        .dropdown-button i {
+            color: var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-button.active i {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #1a1f3a;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 12px;
+            margin-top: 0.5rem;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            box-shadow: var(--card-shadow);
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .dropdown-category {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-category:hover {
+            background: rgba(0, 217, 255, 0.1);
+        }
+
+        .dropdown-category.active {
+            background: rgba(0, 217, 255, 0.15);
+        }
+
+        .dropdown-category.other-category {
+            background: rgba(156, 39, 176, 0.1);
+            border-left: 3px solid var(--other);
+        }
+
+        .dropdown-category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .dropdown-category-header h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dropdown-category.other-category .dropdown-category-header h4 {
+            color: var(--other);
+        }
+
+        .dropdown-category-header i {
+            color: var(--gray-500);
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-category.active .dropdown-category-header i {
+            transform: rotate(90deg);
+        }
+
+        .sub-dropdown {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .sub-dropdown.show {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .sub-dropdown-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding-left: 2rem;
+        }
+
+        .sub-dropdown-item {
+            padding: 0.75rem;
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sub-dropdown-item:hover {
+            background: rgba(0, 217, 255, 0.2);
+            border-color: var(--primary);
+        }
+
+        .sub-dropdown-item.selected {
+            background: var(--primary);
+            border-color: var(--primary-dark);
+            color: var(--dark);
+        }
+
+        .sub-dropdown-item .item-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sub-dropdown-item .item-info i {
+            width: 20px;
+        }
+
+        .sub-dropdown-item .item-price {
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: rgba(0, 217, 255, 0.2);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        .sub-dropdown-item.selected .item-price {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .selected-services-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .service-tag {
+            background: rgba(0, 217, 255, 0.2);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+        }
+
+        .service-tag.other-tag {
+            background: rgba(156, 39, 176, 0.2);
+            color: var(--other);
+            border-color: rgba(156, 39, 176, 0.3);
+        }
+
+        .service-tag i {
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .service-tag i:hover {
+            color: var(--danger);
+        }
+
+        /* Backend Language Section */
+        .backend-language-section {
+            background: rgba(0, 217, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            display: none;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        .backend-language-section.visible {
+            display: block;
+        }
+
+        .backend-language-section h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .backend-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .backend-option {
+            flex: 1 1 calc(33.333% - 1rem);
+            min-width: 150px;
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 8px;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .backend-option:hover {
+            border-color: var(--primary);
+        }
+
+        .backend-option.selected {
+            border-color: var(--primary);
+            background: rgba(0, 217, 255, 0.1);
+        }
+
+        .backend-option i {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .backend-option span {
+            font-weight: 500;
+            color: white;
+        }
+
+        .backend-option small {
+            color: var(--gray-500);
+            font-size: 0.8rem;
+            margin-left: 0.25rem;
+        }
+
+        /* Price Card */
+        .price-card {
+            background: linear-gradient(135deg, #00d9ff20 0%, #0099cc20 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            color: white;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+        }
+
+        .price-info h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .price-info .amount {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .price-badge {
+            background: rgba(0, 217, 255, 0.2);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Payment Section */
+        .payment-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* Payment Method Selection Tabs */
+        .payment-method-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: rgba(0, 217, 255, 0.05);
+            padding: 0.5rem;
+            border-radius: 50px;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        .payment-method-option {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .payment-method-option i {
+            font-size: 1.2rem;
+        }
+
+        .payment-method-option.qr-method {
+            background: rgba(10, 14, 39, 0.6);
+            color: var(--gray-500);
+            border: 1px solid transparent;
+        }
+
+        .payment-method-option.qr-method.active {
+            background: var(--primary);
+            color: var(--dark);
+            border-color: var(--primary-dark);
+        }
+
+        .payment-method-option.upi-method {
+            background: rgba(10, 14, 39, 0.6);
+            color: var(--gray-500);
+            border: 1px solid transparent;
+        }
+
+        .payment-method-option.upi-method.active {
+            background: var(--success);
+            color: var(--dark);
+            border-color: #059669;
+        }
+
+        /* Payment Content Sections */
+        .payment-content {
+            display: none;
+        }
+
+        .payment-content.active {
+            display: block;
+        }
+
+        /* QR Payment Section */
+        .qr-section {
+            text-align: center;
+            background: rgba(10, 14, 39, 0.6);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        .qr-wrapper {
+            background: white;
+            padding: 1rem;
+            border-radius: 16px;
+            display: inline-block;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .qr-wrapper::before {
+            content: 'craft.it@ptyes';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: var(--dark);
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        #qrCanvas {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+        }
+
+        .upi-id-display {
+            margin-top: 1.5rem;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #00d9ff20 0%, #0099cc20 100%);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+        }
+
+        /* Direct UPI Payment Section */
+        .upi-direct-section {
+            background: rgba(10, 14, 39, 0.6);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        .upi-direct-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .upi-apps-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .upi-app-card {
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .upi-app-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 217, 255, 0.2);
+        }
+
+        .upi-app-card.selected {
+            border-color: var(--primary);
+            background: rgba(0, 217, 255, 0.1);
+        }
+
+        .upi-app-card i {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upi-app-card.google-pay i { color: #4285F4; }
+        .upi-app-card.phonepe i { color: #5F259F; }
+        .upi-app-card.amazon-pay i { color: #FF9900; }
+        .upi-app-card.bhim i { color: #E8132C; }
+
+        .upi-app-card span {
+            display: block;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+            color: white;
+        }
+
+        .upi-app-card small {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        .selected-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--success);
+            color: var(--dark);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+        }
+
+        /* UPI Input Section for User */
+        .user-upi-section {
+            background: rgba(10, 14, 39, 0.6);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin: 1.5rem 0;
+            border: 1px dashed var(--primary);
+        }
+
+        .user-upi-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-upi-title i {
+            color: var(--success);
+        }
+
+        .user-upi-input-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .user-upi-input-group input {
+            flex: 1;
+            padding: 0.875rem 1rem;
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 12px;
+            font-size: 1rem;
+            color: white;
+        }
+
+        .user-upi-input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .payment-redirect-options {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .redirect-option {
+            flex: 1;
+            min-width: 200px;
+            padding: 1rem;
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .redirect-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .redirect-option.selected {
+            border-color: var(--primary);
+            background: rgba(0, 217, 255, 0.1);
+        }
+
+        .redirect-option i {
+            font-size: 2rem;
+        }
+
+        .redirect-option.google-pay i { color: #4285F4; }
+        .redirect-option.phonepe i { color: #5F259F; }
+        .redirect-option.amazon-pay i { color: #FF9900; }
+        .redirect-option.bhim i { color: #E8132C; }
+
+        .redirect-option span {
+            font-weight: 600;
+            color: white;
+        }
+
+        .btn-pay-upi {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: var(--dark);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-pay-upi:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .creator-upi-info {
+            background: rgba(0, 217, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+        }
+
+        .creator-upi-info strong {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .instructions {
+            background: rgba(0, 217, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        .instructions h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .instructions ol {
+            padding-left: 1.5rem;
+        }
+
+        .instructions li {
+            margin: 0.5rem 0;
+            color: var(--gray-500);
+        }
+
+        .order-details {
+            background: rgba(10, 14, 39, 0.6);
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: left;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        .order-details h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Payment Status Indicator */
+        .payment-status {
+            background: var(--warning);
+            color: var(--dark);
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .payment-status.visible {
+            display: block;
+        }
+
+        .payment-status.success {
+            background: var(--success);
+        }
+
+        .payment-status i {
+            margin-right: 0.5rem;
+        }
+
+        /* Confirmation Section */
+        .success-animation {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .success-animation i {
+            font-size: 5rem;
+            color: var(--success);
+            animation: scaleIn 0.5s ease;
+        }
+
+        .booking-summary {
+            background: rgba(10, 14, 39, 0.6);
+            padding: 2rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            font-weight: 500;
+            color: var(--gray-500);
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: white;
+        }
+
+        .summary-value.highlight {
+            color: var(--success);
+            font-size: 1.2rem;
+        }
+
+        /* WhatsApp Receipt Section on Page 3 */
+        .whatsapp-receipt-section {
+            background: rgba(37, 211, 102, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            border: 1px solid var(--whatsapp);
+        }
+
+        .whatsapp-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .whatsapp-header i {
+            font-size: 2.5rem;
+            color: var(--whatsapp);
+        }
+
+        .whatsapp-header h3 {
+            color: var(--whatsapp);
+            font-size: 1.3rem;
+        }
+
+        .whatsapp-number-box {
+            background: rgba(10, 14, 39, 0.6);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+            border: 1px solid rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-highlight {
+            background: var(--whatsapp);
+            color: var(--dark);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .whatsapp-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-whatsapp {
+            background: var(--whatsapp);
+            color: var(--dark);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            flex: 1;
+            text-decoration: none;
+        }
+
+        .btn-whatsapp:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .next-steps {
+            background: linear-gradient(135deg, #00d9ff20 0%, #0099cc20 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+        }
+
+        .next-steps h3 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+        }
+
+        .next-steps ul {
+            padding-left: 1.5rem;
+        }
+
+        .next-steps li {
+            margin: 0.75rem 0;
+            color: var(--gray-500);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--dark);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 217, 255, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: var(--dark);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 217, 255, 0.1);
+        }
+
+        .btn-link {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Popup Modal */
+        .popup-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .popup-modal.active {
+            display: flex;
+        }
+
+        .popup-content {
+            background: linear-gradient(135deg, #1a1f3a 0%, #0a0e27 100%);
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+            position: relative;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+        }
+
+        .popup-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: var(--dark);
+            font-size: 2.5rem;
+        }
+
+        .popup-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .popup-content p {
+            color: var(--gray-500);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .popup-content .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .popup-content .btn {
+            flex: 1;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-500);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .popup-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Form Link Display */
+        .form-link-container {
+            background: rgba(220, 53, 69, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--form);
+        }
+
+        .form-link-container i {
+            font-size: 1.5rem;
+            color: var(--form);
+        }
+
+        .form-link-container a {
+            color: var(--form);
+            font-weight: 600;
+            text-decoration: none;
+            word-break: break-all;
+            font-size: 0.9rem;
+        }
+
+        .form-link-container a:hover {
+            text-decoration: underline;
+        }
+
+        .form-link-container .link-icon {
+            background: var(--form);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            flex-direction: column;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(0, 217, 255, 0.3);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        .loading-overlay p {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background: #1a1f3a;
+            color: white;
+            border-radius: 8px;
+            display: none;
+            animation: slideIn 0.3s ease;
+            z-index: 1001;
+            max-width: 300px;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        .toast.success {
+            background: var(--success);
+            color: var(--dark);
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        .toast.warning {
+            background: var(--warning);
+            color: var(--dark);
+        }
+
+        .toast.info {
+            background: var(--info);
+            color: var(--dark);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .payment-container {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero-section h2 {
+                font-size: 2rem;
+            }
+
+            .creator-contact {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 1rem;
+            }
+
+            .payment-method-selector {
+                flex-direction: column;
+                border-radius: 20px;
+            }
+
+            .upi-apps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sub-dropdown-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .backend-option {
+                flex: 100%;
+            }
+
+            .user-upi-input-group {
+                flex-direction: column;
+            }
+
+            .payment-redirect-options {
+                flex-direction: column;
+            }
+
+            .redirect-option {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .price-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .progress-container::before {
+                left: 2rem;
+                right: 2rem;
+            }
+
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .step-label {
+                font-size: 0.8rem;
+            }
+
+            .upi-input-group {
+                flex-direction: column;
+            }
+
+            .radio-group {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .whatsapp-buttons {
+                flex-direction: column;
+            }
+        }
+ .site-footer {
+    margin-top: 3rem;
+    background: rgba(10, 14, 39, 0.9);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(0, 217, 255, 0.3);
+    padding: 2rem 1.5rem 1.5rem;
+    border-radius: 24px 24px 0 0;
+}
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.footer-contact-grid {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0, 217, 255, 0.2)
+}
+
+        @media (max-width: 992px) {
+    .footer-contact-item {
+        padding: 0.5rem 1rem;
+        width: 100%;
+        justify-content: center;
+    }
+}
+.footer-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(0, 217, 255, 0.08);
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    border: 1px solid rgba(0, 217, 255, 0.2);
+    transition: all 0.3s ease;
+}
+.footer-contact-item i {
+    font-size: 1.3rem;
+    color: var(--primary);
+}
+
+.social-links {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+.social-links a:hover {
+    background: var(--primary);
+    color: var(--dark);
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    box-shadow: 0 5px 15px rgba(0, 217, 255, 0.3);
+}
+@media (max-width: 768px) {
+    .social-links a {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        margin: 0 0.5rem;
+    }
+}
+.social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(0, 217, 255, 0.1);
+    margin: 0 0.75rem;
+    color: #6a6f8a;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 217, 255, 0.2);
+}
+:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+}
+:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+}
+@media (max-width: 768px) {
+    .social-links a {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        margin: 0 0.5rem;
+    }
+}
+.footer-tagline i {
+    color: var(--primary);
+    margin-right: 0.3rem;
+}
+.fa-solid, .fas {
+    font-weight: 900;
+}
+:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+}
+fa, .fa-brands, .fa-classic, .fa-regular, .fa-sharp, .fa-solid, .fab, .far, .fas {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    display: var(--fa-display, inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    
+}
+.fa-solid, .fas {
+    font-weight: 900;
+}
+.footer-tagline i {
+    color: var(--primary);
+    margin-right: 0.3rem;
+}
+
+:host, :root {
+    --fa-style-family-classic: "Font Awesome 6 Free";
+    --fa-font-solid: normal 900 1em / 1 "Font Awesome 6 Free";
+}
+:host, :root {
+    --fa-font-regular: normal 400 1em / 1 "Font Awesome 6 Free";
+}
+.footer-tagline {
+    text-align: center;
+    padding-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--gray-500);
+    border-top: 1px solid rgba(0, 217, 255, 0.1);
+}
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+.site-footer {
+    margin-top: 3rem;
+    background: rgba(10, 14, 39, 0.9);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(0, 217, 255, 0.3);
+    padding: 2rem 1.5rem 1.5rem;
+    border-radius: 24px 24px 0 0;
+}
+.footer {
+    display: block;
+    unicode-bidi: isolate;
+}
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    position: relative;
+    z-index: 10;
+}
+.fa-copyright:before {
+    content: "\f1f9";
+}
+:host, :root {
+    --fa-style-family-brands: "Font Awesome 6 Brands";
+    --fa-font-brands: normal 400 1em / 1 "Font Awesome 6 Brands";
+}
+@font-face {
+    font-family: "Font Awesome 6 Free";
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url(../webfonts/fa-regular-400.woff2) format("woff2"), url(../webfonts/fa-regular-400.ttf) format("truetype");
+}
+
+    </style>
+</head>
+<body>
+    <!-- Tech Grid Background -->
+    <div class="bg-grid"></div>
+    
+    <!-- Circuit Lines SVG -->
+    <div class="circuit-lines">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <pattern id="circuit" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+                    <path d="M20 20 L80 20 M80 20 L80 80 M20 80 L80 80" stroke="rgba(0,217,255,0.1)" stroke-width="1" fill="none"/>
+                    <circle cx="20" cy="20" r="3" fill="rgba(0,217,255,0.2)"/>
+                    <circle cx="80" cy="20" r="3" fill="rgba(0,217,255,0.2)"/>
+                    <circle cx="80" cy="80" r="3" fill="rgba(0,217,255,0.2)"/>
+                    <circle cx="20" cy="80" r="3" fill="rgba(0,217,255,0.2)"/>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#circuit)"/>
+        </svg>
+    </div>
+
+    <!-- Creator Contact Bar -->
+
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-robot"></i>
+            </div>
+            <h1>Craft It <span>vibe with crafts</span></h1>
+        </div>
+        <nav class="nav-menu">
+            <a onclick="showNavPopup('home')" class="active"><i class="fas fa-microchip"></i> Home</a>
+            <a onclick="showNavPopup('services')"><i class="fas fa-cogs"></i> Services</a>
+            <a onclick="showNavPopup('offers')"><i class="fas fa-graduation-cap"></i> Student Offers</a>
+            <a onclick="showNavPopup('help')"><i class="fas fa-question-circle"></i> Help</a>
+        </nav>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="whatsapp-header-btn" onclick="showWhatsAppPopup()" title="Contact us on WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+            <div class="form-header-btn" onclick="window.open('https://forms.gle/5R9TecEYuWNjBUSNA', '_blank')" title="📋 Fill Project Details Form (Required after payment)">
+                <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="student-badge" onclick="showStudentProfilePopup()">
+                <i class="fas fa-id-card"></i>
+                <span>CREATOR ID: TECH2026</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h2>Build Your Future with <span class="highlight">Craft It </span></h2>
+            <p>Student Project Platform • Websites • Dashboards • Presentations • Essays • Content • Many more</p>
+            <div class="student-offer" onclick="showOfferPopup()">
+                <i class="fas fa-microchip"></i> Student Offer: Get 20% off on your first project
+            </div>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="progress-container">
+            <div class="progress-step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Project Details</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Payment</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Confirmation</div>
+            </div>
+        </div>
+
+        <!-- Steps Container -->
+        <div class="steps-container">
+            <!-- Step 1: Booking Form -->
+            <div id="step1" class="step active">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-microchip"></i>
+                        <div>
+                            <h2>Project Configuration</h2>
+                            <p>Initialize your project with the following parameters</p>
+                        </div>
+                    </div>
+
+                    <form id="bookingForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label><i class="fas fa-user-astronaut"></i> Full Name *</label>
+                                <input type="text" id="name" class="form-control" placeholder="Your Full name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label><i class="fas fa-envelope"></i> Email Address(valid) *</label>
+                                <input type="email" id="email" class="form-control" placeholder="student@tech.edu" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label><i class="fas fa-phone"></i> Phone Number *</label>
+                                <input type="tel" id="phone" class="form-control" placeholder="+91 98765 43210" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label><i class="fas fa-graduation-cap"></i> Institution</label>
+                                <input type="text" id="college" class="form-control" placeholder="Your College/University">
+                            </div>
+                        </div>
+
+                        <!-- Project Type Dropdown -->
+                        <div class="form-group">
+                            <label><i class="fas fa-code-branch"></i> Select Project Services *</label>
+                            <div class="custom-dropdown">
+                                <div class="dropdown-button" onclick="toggleMainDropdown()" id="dropdownButton">
+                                    <span id="selectedServicesText">Click to select services</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="dropdown-content" id="dropdownContent">
+                                    <!-- Website Development -->
+                                    <div class="dropdown-category" onclick="toggleSubDropdown('web')" id="category-web">
+                                        <div class="dropdown-category-header">
+                                            <h4><i class="fas fa-laptop-code"></i> Web Development Suite</h4>
+                                            <i class="fas fa-chevron-right"></i>
+                                        </div>
+                                        <div class="sub-dropdown" id="sub-web">
+                                            <div class="sub-dropdown-items">
+                                                <div class="sub-dropdown-item" onclick="selectService('frontend', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-code"></i>
+                                                        <span>Frontend Website</span>
+                                                    </div>
+                                                    <span class="item-price">₹5,000</span>
+                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('fullstack', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-layer-group"></i>
+                                                        <span>Full Stack Website</span>
+                                                    </div>
+                                                    <span class="item-price">₹20,000</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Dashboard Creation -->
+                                    <div class="dropdown-category" onclick="toggleSubDropdown('dashboard')" id="category-dashboard">
+                                        <div class="dropdown-category-header">
+                                            <h4><i class="fas fa-chart-line"></i> Dashboard Analytics</h4>
+                                            <i class="fas fa-chevron-right"></i>
+                                        </div>
+                                        <div class="sub-dropdown" id="sub-dashboard">
+                                            <div class="sub-dropdown-items">
+                                                <div class="sub-dropdown-item" onclick="selectService('dashboard-basic', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-chart-pie"></i>
+                                                        <span>Basic Dashboard</span>
+                                                    </div>
+                                                    <span class="item-price">₹8,000</span>
+                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('dashboard-analytics', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-chart-bar"></i>
+                                                        <span>Analytics Dashboard</span>
+                                                    </div>
+                                                    <span class="item-price">₹15,000</span>
+                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('dashboard-interactive', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-chart-line"></i>
+                                                        <span>Interactive Dashboard</span>
+                                                    </div>
+                                                    <span class="item-price">₹20,000</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Presentation Slides -->
+                                    <div class="dropdown-category" onclick="toggleSubDropdown('presentation')" id="category-presentation">
+                                        <div class="dropdown-category-header">
+                                            <h4><i class="fas fa-file-powerpoint"></i> Presentation Studio</h4>
+                                            <i class="fas fa-chevron-right"></i>
+                                        </div>
+                                        <div class="sub-dropdown" id="sub-presentation">
+                                            <div class="sub-dropdown-items">
+                                                <div class="sub-dropdown-item" onclick="selectService('presentation-basic', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-file-powerpoint"></i>
+                                                        <span>Basic Presentation</span>
+                                                    </div>
+                                                    <span class="item-price">₹2,000</span>
+                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('presentation-premium', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-star"></i>
+                                                        <span>Premium Presentation</span>
+                                                    </div>
+                                                    <span class="item-price">₹5,000</span>
+                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('presentation-animated', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-film"></i>
+                                                        <span>Animated Presentation</span>
+                                                    </div>
+                                                    <span class="item-price">₹8,000</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Essay Writing -->
+                                    <div class="dropdown-category" onclick="toggleSubDropdown('essay')" id="category-essay">
+                                        <div class="dropdown-category-header">
+                                            <h4><i class="fas fa-pen-fancy"></i> Essay AI</h4>
+                                            <i class="fas fa-chevron-right"></i>
+                                        </div>
+                                        <div class="sub-dropdown" id="sub-essay">
+                                            <div class="sub-dropdown-items">
+                                                <div class="sub-dropdown-item" onclick="selectService('essay-short', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-file-alt"></i>
+                                                        <span>Short Essay (500 words)</span>
+                                                    </div>
+                                                    <span class="item-price">₹1,000</span>
+                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('essay-medium', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-file-lines"></i>
+                                                        <span>Medium Essay (1000 words)</span>
+                                                    </div>
+                                                    <span class="item-price">₹1,800</span>
+                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('essay-long', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-file"></i>
+                                                        <span>Long Essay (2000 words)</span>
+                                                    </div>
+                                                    <span class="item-price">₹3,000</span>
+                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('essay-research', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-microscope"></i>
+                                                        <span>Research Paper</span>
+                                                    </div>
+                                                    <span class="item-price">₹5,000</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Content Generation -->
+                                    <div class="dropdown-category" onclick="toggleSubDropdown('content')" id="category-content">
+                                        <div class="dropdown-category-header">
+                                            <h4><i class="fas fa-robot"></i> Content Generator</h4>
+                                            <i class="fas fa-chevron-right"></i>
+                                        </div>
+                                        <div class="sub-dropdown" id="sub-content">
+                                            <div class="sub-dropdown-items">
+                                                <div class="sub-dropdown-item" onclick="selectService('content-blog', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-blog"></i>
+                                                        <span>Blog Post</span>
+                                                    </div>
+                                                    <span class="item-price">₹800</span>
+                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('content-social', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-hashtag"></i>
+                                                        <span>Social Media Content</span>
+                                                    </div>
+                                                    <span class="item-price">₹500</span>
+                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('content-product', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-tag"></i>
+                                                        <span>Product Description</span>
+                                                    </div>
+                                                    <span class="item-price">₹600</span>
+                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('content-email', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-envelope"></i>
+                                                        <span>Email Newsletter</span>
+                                                    </div>
+                                                    <span class="item-price">₹700</span>
+                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('content-seo', event)">
+                                                    <div class="item-info">
+                                                        <i class="fas fa-search"></i>
+                                                        <span>SEO Content</span>
+                                                    </div>
+                                                    <span class="item-price">₹1,200</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Other Option -->
+                                    <div class="dropdown-category other-category" onclick="selectOtherOption()" id="category-other">
+                                        <div class="dropdown-category-header">
+                                            <h4><i class="fas fa-question-circle"></i> Custom / Other Project</h4>
+                                            <span class="item-price" style="background: var(--other); color: white; padding: 0.2rem 0.5rem; border-radius: 4px;">₹100</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Selected Services Tags -->
+                            <div class="selected-services-tags" id="selectedServicesTags"></div>
+                        </div>
+
+                        <!-- Hidden inputs -->
+                        <input type="hidden" id="selectedServices" name="selectedServices" value="">
+                        <input type="hidden" id="selectedBackend" name="selectedBackend" value="">
+                        <input type="hidden" id="totalPrice" name="totalPrice" value="0">
+
+                        <!-- Backend Language Section -->
+                        <div class="backend-language-section" id="backendLanguageSection">
+                            <h4><i class="fas fa-database"></i> Select Backend Framework</h4>
+                            <div class="backend-options">
+                                <div class="backend-option" onclick="selectBackendLanguage('node')" id="backend-node">
+                                    <i class="fab fa-node"></i>
+                                    <span>Node.js <small>+₹0</small></span>
+                                </div>
+                                <div class="backend-option" onclick="selectBackendLanguage('python')" id="backend-python">
+                                    <i class="fab fa-python"></i>
+                                    <span>Python <small>+₹5,000</small></span>
+                                </div>
+                                <div class="backend-option" onclick="selectBackendLanguage('java')" id="backend-java">
+                                    <i class="fab fa-java"></i>
+                                    <span>Java <small>+₹10,000</small></span>
+                                </div>
+                                <div class="backend-option" onclick="selectBackendLanguage('php')" id="backend-php">
+                                    <i class="fab fa-php"></i>
+                                    <span>PHP <small>+₹0</small></span>
+                                </div>
+                                <div class="backend-option" onclick="selectBackendLanguage('ruby')" id="backend-ruby">
+                                    <i class="fas fa-gem"></i>
+                                    <span>Ruby <small>+₹3,000</small></span>
+                                </div>
+                                <div class="backend-option" onclick="selectBackendLanguage('go')" id="backend-go">
+                                    <i class="fas fa-code"></i>
+                                    <span>Go <small>+₹7,000</small></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Details -->
+                        <div class="form-group full-width">
+                            <label><i class="fas fa-align-left"></i> Project Description *</label>
+                            <textarea id="description" class="form-control" placeholder="Describe your project requirements in detail... What features do you need? Any specific tech stack preferences?" required></textarea>
+                        </div>
+
+                        <!-- Price Display -->
+                        <div class="price-card">
+                            <div class="price-info">
+                                <h3><i class="fas fa-tag"></i> Total Amount (After 20% Student Discount)</h3>
+                                <div class="amount" id="priceAmount">₹0</div>
+                            </div>
+                            <div class="price-badge">
+                                <i class="fas fa-graduation-cap"></i> 20% Discount
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <i class="fas fa-arrow-right"></i> Initialize Payment
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Step 2: Payment -->
+            <div id="step2" class="step">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-credit-card"></i>
+                        <div>
+                            <h2>Payment Gateway</h2>
+                            <p>Select your preferred payment protocol</p>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method Selector -->
+                    <div class="payment-method-selector">
+                        <div class="payment-method-option qr-method active" onclick="selectPaymentMethod('qr')" id="method-qr">
+                            <i class="fas fa-qrcode"></i>
+                            <span>QR Code Scan</span>
+                        </div>
+                        <div class="payment-method-option upi-method" onclick="selectPaymentMethod('upi')" id="method-upi">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>Direct UPI Pay</span>
+                        </div>
+                    </div>
+
+                    <!-- QR Code Payment Content -->
+                    <div class="payment-content active" id="payment-qr">
+                        <div class="payment-container">
+                            <div class="qr-section">
+                                <div class="qr-wrapper">
+                                    <div id="qrCanvas"></div>
+                                </div>
+                                
+                                <div class="upi-id-display" onclick="copyUPIId()">
+                                    <i class="fas fa-copy"></i>
+                                    <span>craft.it@ptyes</span>
+                                </div>
+
+                                <div class="instructions">
+                                    <h4><i class="fas fa-info-circle"></i> QR Scan Protocol:</h4>
+                                    <ol>
+                                        <li>Open any UPI app on your device</li>
+                                        <li>Scan the QR code above</li>
+                                        <li>Verify amount: ₹<span id="instructionAmount">0</span></li>
+                                        <li>Enter your UPI PIN to authenticate</li>
+                                        <li>Click "Payment Complete" below</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Direct UPI Payment Content -->
+                    <div class="payment-content" id="payment-upi">
+                        <div class="upi-direct-section">
+                            <div class="upi-direct-title">
+                                <i class="fas fa-mobile-alt"></i> Direct UPI Transaction
+                            </div>
+                            
+                            <div class="user-upi-section">
+                                <div class="user-upi-title">
+                                    <i class="fas fa-user-circle"></i> Your UPI ID (Optional)
+                                </div>
+                                <div class="user-upi-input-group">
+                                    <input type="text" id="userUpiId" placeholder="e.g., yourname@okhdfcbank" value="">
+                                    <button class="btn-outline" onclick="saveUserUpiId()" style="width: auto; padding: 0.875rem 1.5rem;">
+                                        <i class="fas fa-save"></i> Save
+                                    </button>
+                                </div>
+                                <p style="font-size: 0.85rem; color: var(--gray-500);">
+                                    <i class="fas fa-info-circle"></i> This helps identify your payment
+                                </p>
+                            </div>
+
+                            <div class="creator-upi-info">
+                                <div>
+                                    <i class="fas fa-lock" style="color: var(--success);"></i>
+                                    <strong>Pay to UPI ID:</strong>
+                                </div>
+                                <span class="upi-highlight">craft.it@ptyes</span>
+                            </div>
+
+                            <div class="payment-redirect-options">
+                                <div class="redirect-option google-pay" onclick="selectRedirectApp('googlepay')" id="redirect-googlepay">
+                                    <i class="fab fa-google-pay"></i>
+                                    <span>Google Pay</span>
+                                </div>
+                                <div class="redirect-option phonepe" onclick="selectRedirectApp('phonepe')" id="redirect-phonepe">
+                                    <i class="fas fa-phone"></i>
+                                    <span>PhonePe</span>
+                                </div>
+                                <div class="redirect-option amazon-pay" onclick="selectRedirectApp('amazonpay')" id="redirect-amazonpay">
+                                    <i class="fab fa-amazon-pay"></i>
+                                    <span>Amazon Pay</span>
+                                </div>
+                                <div class="redirect-option bhim" onclick="selectRedirectApp('bhim')" id="redirect-bhim">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <span>BHIM UPI</span>
+                                </div>
+                            </div>
+
+                            <button class="btn-pay-upi" id="payWithUpiBtn" onclick="payWithUpi()">
+                                <i class="fas fa-arrow-right"></i> Execute Payment
+                            </button>
+
+                            <div class="instructions" style="margin-top: 1.5rem;">
+                                <h4><i class="fas fa-info-circle"></i> UPI Payment Protocol:</h4>
+                                <ol>
+                                    <li>Enter your UPI ID (optional for tracking)</li>
+                                    <li>Select your preferred UPI app</li>
+                                    <li>You'll be redirected to the app</li>
+                                    <li>Verify amount: ₹<span id="upiAmount">0</span></li>
+                                    <li>Complete the transaction</li>
+                                    <li>Return and click "Payment Complete"</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div style="margin-top: 2rem;">
+                        <div class="order-details">
+                            <h3><i class="fas fa-receipt"></i> Order Summary</h3>
+                            
+                            <div class="detail-item">
+                                <span class="detail-label">Order ID:</span>
+                                <span class="detail-value" id="orderId">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Selected Services:</span>
+                                <span class="detail-value" id="orderServices">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Backend:</span>
+                                <span class="detail-value" id="orderBackend">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Student Discount:</span>
+                                <span class="detail-value">20% OFF</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Subtotal:</span>
+                                <span class="detail-value" id="orderSubtotal">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Total Amount:</span>
+                                <span class="detail-value highlight" id="orderTotal">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Pay to UPI ID:</span>
+                                <span class="detail-value upi-highlight">craft.it@ptyes</span>
+                            </div>
+
+                            <div style="margin-top: 2rem;">
+                                <button class="btn btn-success" id="verifyPaymentBtn" onclick="verifyPayment()">
+                                    <i class="fas fa-check-circle"></i> Payment Complete
+                                </button>
+                                
+                                <button class="btn-link" onclick="goToStep(1)">
+                                    <i class="fas fa-arrow-left"></i> Back to Edit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-status" id="paymentStatus">
+                        <i class="fas fa-sync-alt fa-spin"></i> Verifying payment...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Confirmation -->
+            <div id="step3" class="step">
+                <div class="card">
+                    <div class="success-animation">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <h2>Project Initiated! 🚀</h2>
+                        <p style="color: var(--gray-500);">Your project has been successfully registered in our system.</p>
+                    </div>
+
+                    <div class="booking-summary">
+                        <h3 style="margin-bottom: 1.5rem;">Project Summary</h3>
+                        
+                        <div class="summary-row">
+                            <span class="summary-label">Name:</span>
+                            <span class="summary-value" id="summaryName">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Email:</span>
+                            <span class="summary-value" id="summaryEmail">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Phone:</span>
+                            <span class="summary-value" id="summaryPhone">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Institution:</span>
+                            <span class="summary-value" id="summaryCollege">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Project Services:</span>
+                            <span class="summary-value" id="summaryServices">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Backend:</span>
+                            <span class="summary-value" id="summaryBackend">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Amount Paid:</span>
+                            <span class="summary-value highlight" id="summaryAmount">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Transaction ID:</span>
+                            <span class="summary-value" id="summaryPaymentId">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Creator UPI:</span>
+                            <span class="summary-value upi-highlight">craft.it@ptyes</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Your UPI:</span>
+                            <span class="summary-value" id="summaryUserUpi">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Payment Method:</span>
+                            <span class="summary-value" id="summaryPaymentMethod">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Date:</span>
+                            <span class="summary-value" id="summaryDate">-</span>
+                        </div>
+                    </div>
+
+                    <!-- WhatsApp Receipt Section -->
+                    <div class="whatsapp-receipt-section">
+                        <div class="whatsapp-header">
+                            <i class="fab fa-whatsapp"></i>
+                            <h3>Send Receipt to Support</h3>
+                        </div>
+                        
+                        <div class="whatsapp-number-box">
+                            <span class="whatsapp-highlight">
+                                <i class="fab fa-whatsapp"></i> +91 6006573367
+                            </span>
+                        </div>
+
+                        <div class="whatsapp-buttons">
+                            <button class="btn btn-success" onclick="downloadPDFReceipt()" style="background: var(--primary);">
+                                <i class="fas fa-file-pdf"></i> Download PDF Receipt
+                            </button>
+                            <a href="https://wa.me/916006573367" target="_blank" class="btn-whatsapp">
+                                <i class="fab fa-whatsapp"></i> Open WhatsApp
+                            </a>
+                        </div>
+                        
+                        <p style="font-size: 0.9rem; color: var(--gray-500); margin-top: 1rem; text-align: center;">
+                            <i class="fas fa-info-circle"></i> After download, send the PDF to this WhatsApp number
+                        </p>
+                    </div>
+
+                    <div style="background: rgba(0, 217, 255, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0; display: flex; align-items: center; gap: 1rem; border: 1px solid rgba(0, 217, 255, 0.3);">
+                        <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.5rem;"></i>
+                        <div>
+                            <p style="font-weight: 600; margin-bottom: 0.25rem;">✓  Support Notified</p>
+                            <p style="font-size: 0.9rem; color: var(--gray-500);">Project details sent to +91 6006573367 and craftitsite@gmail.com</p>
+                        </div>
+                    </div>
+
+                    <div class="next-steps">
+                        <h3><i class="fas fa-clock"></i> Next Steps</h3>
+                        <ul>
+                            <li>✅ Download the PDF receipt</li>
+                            <li>📱 Send the PDF to <strong>+91 6006573367</strong> on WhatsApp</li>
+                            <li>🤖 WE will review your requirements within 24 hours</li>
+                            <li>📞 Schedule a video call for detailed discussion</li>
+                            <li>🚀 Development begins after final approval</li>
+                        </ul>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <button class="btn btn-outline" onclick="downloadPDFReceipt()">
+                            <i class="fas fa-file-pdf"></i> Download PDF
+                        </button>
+                        <a href="https://wa.me/916006573367" target="_blank" class="btn-whatsapp" style="text-decoration: none; width: auto;">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <button class="btn btn-primary" onclick="resetBooking()" id="bookAnotherBtn">
+                            <i class="fas fa-plus-circle"></i> New Project
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Modals -->
+    <div class="popup-modal" id="upiPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup('upiPopup')"><i class="fas fa-times"></i></button>
+            <div class="popup-icon" id="popupIcon">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h3 id="popupTitle">Google Pay Selected</h3>
+            <p id="popupMessage">Open Google Pay app and pay to UPI ID <strong>craft.it@ptyes</strong> for ₹<span id="popupAmount">0</span></p>
+            <button class="btn btn-primary" onclick="closePopup('upiPopup')">
+                <i class="fas fa-check"></i> Got it
+            </button>
+        </div>
+    </div>
+
+    <div class="popup-modal whatsapp-popup" id="whatsappPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup('whatsappPopup')"><i class="fas fa-times"></i></button>
+            <div class="popup-icon" style="background: var(--whatsapp);">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+            <h3>WhatsApp Support</h3>
+            <p>After payment, please send your receipt to this WhatsApp number:</p>
+            <div style="background: rgba(0, 217, 255, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <span style="font-size: 1.5rem; font-weight: 700; color: var(--whatsapp);">
+                    <i class="fab fa-whatsapp"></i> +91 6006573367
+                </span>
+            </div>
+            <p style="color: var(--gray-500);">This helps verify your payment and start your project!</p>
+            <a href="https://wa.me/916006573367" target="_blank" class="btn-whatsapp" style="text-decoration: none;">
+                <i class="fab fa-whatsapp"></i> Open WhatsApp
+            </a>
+        </div>
+    </div>
+
+    <div class="popup-modal other-popup" id="otherPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup('otherPopup')"><i class="fas fa-times"></i></button>
+            <div class="popup-icon" style="background: var(--other);">
+                <i class="fas fa-question-circle"></i>
+            </div>
+            <h3>Custom Project</h3>
+            <p>You've selected the <strong>Custom / Other Project</strong> option.</p>
+            <div style="background: rgba(156, 39, 176, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <p style="font-size: 1.1rem;"><strong>Initial Consultation Fee: ₹100</strong></p>
+                <p style="font-size: 0.9rem; color: var(--gray-500);">This ₹100 will be adjusted in your final project cost after discussion.</p>
+            </div>
+            <p>Describe your project in detail. We'll contact you to discuss further.</p>
+            <button class="btn btn-primary" onclick="closePopup('otherPopup')">
+                <i class="fas fa-check"></i> I Understand
+            </button>
+        </div>
+    </div>
+
+    <div class="popup-modal" id="navPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup('navPopup')"><i class="fas fa-times"></i></button>
+            <div class="popup-icon" id="navPopupIcon">
+                <i class="fas fa-home"></i>
+            </div>
+            <h3 id="navPopupTitle">Welcome to Craft It !</h3>
+            <p id="navPopupMessage">Platform for student projects.</p>
+            <button class="btn btn-primary" onclick="closePopup('navPopup')">
+                <i class="fas fa-check"></i> Continue
+            </button>
+        </div>
+    </div>
+
+    <div class="popup-modal" id="offerPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup('offerPopup')"><i class="fas fa-times"></i></button>
+            <div class="popup-icon">
+                <i class="fas fa-gift"></i>
+            </div>
+            <h3>Tech Student Offers</h3>
+            <div style="text-align: left; margin: 1.5rem 0;">
+                <p style="margin: 0.5rem 0;"><i class="fas fa-check-circle" style="color: var(--success);"></i> <strong>20% off</strong> on first project</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-check-circle" style="color: var(--success);"></i> <strong>Free</strong> AI consultation</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-check-circle" style="color: var(--success);"></i> <strong>Bulk discount:</strong> 30% off on 3+ services</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-check-circle" style="color: var(--success);"></i> <strong>Referral bonus:</strong> 10% off</p>
+                <p style="margin: 0.5rem 0;"><i class="fas fa-check-circle" style="color: var(--success);"></i> <strong>Certificate</strong> for portfolio</p>
+            </div>
+            <button class="btn btn-primary" onclick="closePopup('offerPopup')">
+                <i class="fas fa-check"></i> Awesome!
+            </button>
+        </div>
+    </div>
+
+    <div class="popup-modal" id="profilePopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup('profilePopup')"><i class="fas fa-times"></i></button>
+            <div class="popup-icon">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <h3>Creator Profile</h3>
+            <div style="text-align: left; margin: 1.5rem 0;">
+                <p><strong>MEMBERSHIP:</strong> CRAFTIT2026</p>
+                <p><strong>Name:</strong> <span id="profileName">CRAFTIT</span></p>
+                <p><strong>Email:</strong> <span id="profileEmail">craftitsite@gmail.com</span></p>
+                <p><strong>Projects Completed:</strong> 3</p>
+                <p><strong>Discount:</strong> Active (20% off)</p>
+                <p><strong>Member Since:</strong> January 2026</p>
+            </div>
+            <button class="btn btn-primary" onclick="closePopup('profilePopup')">
+                <i class="fas fa-check"></i> OK
+            </button>
+        </div>
+    </div>
+
+    <div class="popup-modal" id="techPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup('techPopup')"><i class="fas fa-times"></i></button>
+            <div class="popup-icon" id="techPopupIcon">
+                <i class="fab fa-react"></i>
+            </div>
+            <h3 id="techPopupTitle">React.js</h3>
+            <p id="techPopupMessage">A JavaScript library for building user interfaces. Great for interactive web apps!</p>
+            <button class="btn btn-primary" onclick="closePopup('techPopup')">
+                <i class="fas fa-check"></i> Got it
+            </button>
+        </div>
+    </div>
+
+    <div class="popup-modal" id="servicePopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup('servicePopup')"><i class="fas fa-times"></i></button>
+            <div class="popup-icon" id="servicePopupIcon">
+                <i class="fas fa-laptop-code"></i>
+            </div>
+            <h3 id="servicePopupTitle">Service Added</h3>
+            <p id="servicePopupMessage">Service added to your cart. You can select multiple services!</p>
+            <button class="btn btn-primary" onclick="closePopup('servicePopup')">
+                <i class="fas fa-check"></i> Continue
+            </button>
+        </div>
+    </div>
+
+    <div class="popup-modal" id="paymentSuccessPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup('paymentSuccessPopup')"><i class="fas fa-times"></i></button>
+            <div class="popup-icon" style="background: var(--success);">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Payment Initiated!</h3>
+            <p id="paymentSuccessMessage">Your payment of ₹<span id="paymentSuccessAmount">0</span> has been initiated.</p>
+            <p style="font-size: 0.9rem; color: var(--gray-500); margin-top: 1rem;">Creator's UPI: <strong>craft.it@ptyes</strong></p>
+            <p style="font-size: 0.9rem; color: var(--warning); margin-top: 0.5rem;">⚠️ Click "Confirm Payment" after completing in your app.</p>
+            <button class="btn btn-primary" onclick="closePopup('paymentSuccessPopup')">
+                <i class="fas fa-check"></i> OK, I'll confirm
+            </button>
+        </div>
+    </div>
+
+    <div class="popup-modal" id="finalConfirmationPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup('finalConfirmationPopup')"><i class="fas fa-times"></i></button>
+            <div class="popup-icon" style="background: var(--success);">
+                <i class="fas fa-check-double"></i>
+            </div>
+            <h3>Payment Confirmed!</h3>
+            <p>Your payment has been confirmed. Moving to confirmation page...</p>
+            <button class="btn btn-primary" onclick="goToStep3()">
+                <i class="fas fa-arrow-right"></i> Continue
+            </button>
+        </div>
+    </div>
+
+    <div class="popup-modal" id="pdfReceiptPopup">
+        <div class="popup-content">
+            <button class="popup-close" onclick="closePopup('pdfReceiptPopup')"><i class="fas fa-times"></i></button>
+            <div class="popup-icon" style="background: var(--whatsapp);">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+            <h3>Download Receipt</h3>
+            <p style="font-size: 1.1rem; margin-bottom: 1rem;">Download your PDF receipt and send to:</p>
+            <div style="background: rgba(0, 217, 255, 0.1); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                <span class="whatsapp-highlight" style="font-size: 1.5rem; padding: 0.5rem 1rem; display: inline-block;">
+                    <i class="fab fa-whatsapp"></i> +91 6006573367
+                </span>
+            </div>
+            <p style="color: var(--gray-500); margin-bottom: 1.5rem;">This helps verify your payment and start your project!</p>
+            <div class="btn-group">
+                <button class="btn btn-success" onclick="downloadPDFReceipt()" style="background: var(--primary);">
+                    <i class="fas fa-file-pdf"></i> Download PDF
+                </button>
+                <a href="https://wa.me/916006573367" target="_blank" class="btn-whatsapp" style="text-decoration: none;">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-modal form-popup" id="compulsoryFormPopup">
+        <div class="popup-content">
+            <div class="popup-icon" style="background: var(--form);">
+                <i class="fas fa-file-alt"></i>
+            </div>
+            <h3>📋 Mandatory: Project Details Form</h3>
+            <p style="margin-bottom: 1rem;">Please fill out this form to help us understand your requirements.</p>
+            
+            <div class="form-link-container">
+                <div class="link-icon">
+                    <i class="fas fa-link"></i>
+                </div>
+                <a href="https://forms.gle/5R9TecEYuWNjBUSNA" target="_blank" title="Open project form">
+                    https://forms.gle/5R9TecEYuWNjBUSNA
+                </a>
+            </div>
+            
+            <p style="font-size: 0.9rem; color: var(--gray-500); margin-bottom: 1rem;">Form opens in new tab. Complete and return here.</p>
+            <p style="font-size: 0.9rem; font-weight: 600; color: var(--form); margin-bottom: 1.5rem;">Cannot proceed without submitting this form.</p>
+            
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-outline" onclick="window.open('https://forms.gle/5R9TecEYuWNjBUSNA', '_blank')" style="flex: 1;">
+                    <i class="fas fa-external-link-alt"></i> Open Form
+                </button>
+                <button class="btn btn-primary" onclick="confirmFormSubmitted()" style="background: var(--form); flex: 1;">
+                    <i class="fas fa-check-circle"></i> I Have Submitted
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p id="loadingMessage">Processing...</p>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Quick Help Button -->
+    <button style="position: fixed; bottom: 20px; left: 20px; width: 50px; height: 50px; border-radius: 25px; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); border: none; color: var(--dark); font-size: 1.2rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0, 217, 255, 0.3);" onclick="showHelpPopup()" title="Need help? Click here">
+        <i class="fas fa-robot"></i>
+    </button>
+
+     <footer class="site-footer">
+            <div class="footer-container">
+                <div class="footer-contact-grid">
+                    <div class="footer-contact-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <span><strong>Support:</strong> +91 6006573367</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span><strong>Email:</strong> craftitsite@gmail.com</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-microchip"></i>
+                        <span><strong>Students Project Platform</strong></span>
+                    </div>
+                </div>
+                
+                <div class="social-links">
+                    <a href="https://www.instagram.com/craft.itofficial/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://x.com/CraftItoficialx" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com/in/craftit-site-580a23402/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/craftitsite" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                </div>
+                
+                <div class="footer-tagline">
+                    <i class="fas fa-copyright"></i> 2026 Craft It — Empowering student creators with tech solutions.
+                </div>
+            </div>
+        </footer>
+    <script>
+        // Creator Contact Details
+        const CREATOR_PHONE = '6006573367';
+        const CREATOR_EMAIL = 'craftitsite@gmail.com';
+        const WHATSAPP_NUMBER = '6006573367';
+        const GOOGLE_FORM_URL = 'https://forms.gle/5R9TecEYuWNjBUSNA';
+        
+        // Creator UPI ID - Updated to craft.it@ptyes
+        const CREATOR_UPI_ID = 'craft.it@ptyes';
+
+        // Service Prices
+        const SERVICE_PRICES = {
+            'frontend': 5000, 'fullstack': 20000,
+            'dashboard-basic': 8000, 'dashboard-analytics': 15000, 'dashboard-interactive': 20000,
+            'presentation-basic': 2000, 'presentation-premium': 5000, 'presentation-animated': 8000,
+            'essay-short': 1000, 'essay-medium': 1800, 'essay-long': 3000, 'essay-research': 5000,
+            'content-blog': 800, 'content-social': 500, 'content-product': 600, 'content-email': 700, 'content-seo': 1200,
+            'other': 100
+        };
+
+        const BACKEND_PRICES = { 'node': 0, 'python': 5000, 'java': 10000, 'php': 0, 'ruby': 3000, 'go': 7000 };
+
+        const SERVICE_NAMES = {
+            'frontend': 'Frontend Website', 'fullstack': 'Full Stack Website',
+            'dashboard-basic': 'Basic Dashboard', 'dashboard-analytics': 'Analytics Dashboard', 'dashboard-interactive': 'Interactive Dashboard',
+            'presentation-basic': 'Basic Presentation', 'presentation-premium': 'Premium Presentation', 'presentation-animated': 'Animated Presentation',
+            'essay-short': 'Short Essay (500 words)', 'essay-medium': 'Medium Essay (1000 words)', 'essay-long': 'Long Essay (2000 words)', 'essay-research': 'Research Paper',
+            'content-blog': 'Blog Post', 'content-social': 'Social Media Content', 'content-product': 'Product Description', 'content-email': 'Email Newsletter', 'content-seo': 'SEO Content',
+            'other': 'Custom Project'
+        };
+
+        const STUDENT_DISCOUNT = 0.2;
+
+        let currentBooking = {
+            id: null, name: '', email: '', phone: '', college: '',
+            selectedServices: [], backendLanguage: '', description: '',
+            originalPrice: 0, discountedPrice: 0
+        };
+        let currentOrder = null;
+        let selectedUPIApp = null;
+        let selectedPaymentMethod = 'qr';
+        let selectedRedirectApp = null;
+        let userSavedUpiId = '';
+        let paymentVerified = false;
+        let isFormSubmitted = false;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('summaryDate').textContent = new Date().toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+            document.getElementById('bookingForm').addEventListener('submit', handleFormSubmit);
+            document.addEventListener('click', function(event) {
+                const dropdown = document.getElementById('dropdownContent');
+                const button = document.getElementById('dropdownButton');
+                if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+                    dropdown.classList.remove('show');
+                    button.classList.remove('active');
+                    document.querySelectorAll('.sub-dropdown').forEach(sub => sub.classList.remove('show'));
+                    document.querySelectorAll('.dropdown-category').forEach(cat => cat.classList.remove('active'));
+                }
+            });
+            document.querySelectorAll('.form-control').forEach(input => {
+                input.addEventListener('invalid', handleInvalidInput);
+                input.addEventListener('input', removeErrorStyle);
+            });
+            setActiveNav('home');
+        });
+
+        function selectOtherOption() {
+            document.getElementById('otherPopup').classList.add('active');
+            if (!currentBooking.selectedServices.includes('other')) {
+                currentBooking.selectedServices.push('other');
+                updateSelectedServicesTags();
+                updatePrice();
+            }
+            document.getElementById('dropdownContent').classList.remove('show');
+            document.getElementById('dropdownButton').classList.remove('active');
+        }
+
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            document.getElementById('method-qr').classList.remove('active');
+            document.getElementById('method-upi').classList.remove('active');
+            document.getElementById(`method-${method}`).classList.add('active');
+            document.getElementById('payment-qr').classList.remove('active');
+            document.getElementById('payment-upi').classList.remove('active');
+            document.getElementById(`payment-${method}`).classList.add('active');
+        }
+
+        function selectRedirectApp(app) {
+            selectedRedirectApp = app;
+            document.querySelectorAll('.redirect-option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById(`redirect-${app}`).classList.add('selected');
+        }
+
+        function payWithUpi() {
+            if (!selectedRedirectApp) {
+                showToast('Please select a UPI app!', 'warning');
+                return;
+            }
+            const amount = Math.round(currentBooking.discountedPrice);
+            const appLinks = {
+                'googlepay': `tez://upi/pay?pa=${CREATOR_UPI_ID}&pn=Craft%20It&am=${amount}&cu=INR`,
+                'phonepe': `phonepe://pay?pa=${CREATOR_UPI_ID}&pn=Craft%20It&am=${amount}&cu=INR`,
+                'amazonpay': `amazonpay://upi?pa=${CREATOR_UPI_ID}&pn=Craft%20It&am=${amount}&cu=INR`,
+                'bhim': `bhim://upi/pay?pa=${CREATOR_UPI_ID}&pn=Craft%20It&am=${amount}&cu=INR`
+            };
+            window.location.href = appLinks[selectedRedirectApp];
+            document.getElementById('paymentSuccessMessage').innerHTML = `Redirecting to ${selectedRedirectApp.toUpperCase()}...<br><br>Amount: ₹${amount.toLocaleString()}<br>Pay to: ${CREATOR_UPI_ID}`;
+            document.getElementById('paymentSuccessPopup').classList.add('active');
+            setTimeout(() => {
+                window.location.href = `https://play.google.com/store/apps/details?id=com.google.android.apps.nbu.paisa.user`;
+            }, 2000);
+        }
+
+        function toggleMainDropdown() {
+            const dropdown = document.getElementById('dropdownContent');
+            const button = document.getElementById('dropdownButton');
+            dropdown.classList.toggle('show');
+            button.classList.toggle('active');
+        }
+
+        function toggleSubDropdown(category) {
+            const subDropdown = document.getElementById(`sub-${category}`);
+            const categoryEl = document.getElementById(`category-${category}`);
+            document.querySelectorAll('.sub-dropdown').forEach(sub => {
+                if (sub.id !== `sub-${category}`) sub.classList.remove('show');
+            });
+            document.querySelectorAll('.dropdown-category').forEach(cat => {
+                if (cat.id !== `category-${category}`) cat.classList.remove('active');
+            });
+            subDropdown.classList.toggle('show');
+            categoryEl.classList.toggle('active');
+            event.stopPropagation();
+        }
+
+        function selectService(serviceId, event) {
+            event.stopPropagation();
+            const dropdownItem = event.currentTarget;
+            if (currentBooking.selectedServices.includes(serviceId)) {
+                currentBooking.selectedServices = currentBooking.selectedServices.filter(s => s !== serviceId);
+                dropdownItem.classList.remove('selected');
+            } else {
+                currentBooking.selectedServices.push(serviceId);
+                dropdownItem.classList.add('selected');
+                const servicePopup = document.getElementById('servicePopup');
+                document.getElementById('servicePopupIcon').innerHTML = dropdownItem.querySelector('i').outerHTML;
+                document.getElementById('servicePopupTitle').innerHTML = SERVICE_NAMES[serviceId] || 'Service Selected';
+                document.getElementById('servicePopupMessage').innerHTML = `✅ ${SERVICE_NAMES[serviceId]} added to your cart. You can select more services!`;
+                servicePopup.classList.add('active');
+            }
+            updateSelectedServicesTags();
+            if (currentBooking.selectedServices.includes('fullstack')) {
+                document.getElementById('backendLanguageSection').classList.add('visible');
+            } else {
+                document.getElementById('backendLanguageSection').classList.remove('visible');
+                currentBooking.backendLanguage = '';
+                document.querySelectorAll('.backend-option').forEach(opt => opt.classList.remove('selected'));
+            }
+            updatePrice();
+        }
+
+        function updateSelectedServicesTags() {
+            const tagsContainer = document.getElementById('selectedServicesTags');
+            const selectedText = document.getElementById('selectedServicesText');
+            tagsContainer.innerHTML = '';
+            if (currentBooking.selectedServices.length > 0) {
+                selectedText.textContent = `${currentBooking.selectedServices.length} service(s) selected`;
+                currentBooking.selectedServices.forEach(serviceId => {
+                    const tag = document.createElement('span');
+                    tag.className = 'service-tag';
+                    if (serviceId === 'other') tag.classList.add('other-tag');
+                    tag.innerHTML = `${SERVICE_NAMES[serviceId]} <i class="fas fa-times" onclick="removeService('${serviceId}')"></i>`;
+                    tagsContainer.appendChild(tag);
+                });
+            } else {
+                selectedText.textContent = 'Click to select services';
+            }
+        }
+
+        function removeService(serviceId) {
+            currentBooking.selectedServices = currentBooking.selectedServices.filter(s => s !== serviceId);
+            document.querySelectorAll('.sub-dropdown-item').forEach(item => {
+                const itemName = item.querySelector('.item-info span')?.textContent;
+                if (itemName && itemName.includes(SERVICE_NAMES[serviceId])) item.classList.remove('selected');
+            });
+            updateSelectedServicesTags();
+            if (serviceId === 'fullstack' || !currentBooking.selectedServices.includes('fullstack')) {
+                document.getElementById('backendLanguageSection').classList.remove('visible');
+                currentBooking.backendLanguage = '';
+                document.querySelectorAll('.backend-option').forEach(opt => opt.classList.remove('selected'));
+            }
+            updatePrice();
+        }
+
+        function selectBackendLanguage(lang) {
+            document.querySelectorAll('.backend-option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById(`backend-${lang}`).classList.add('selected');
+            currentBooking.backendLanguage = lang;
+            updatePrice();
+        }
+
+        function updatePrice() {
+            let originalPrice = 0;
+            let servicesList = '';
+            currentBooking.selectedServices.forEach(serviceId => {
+                if (SERVICE_PRICES[serviceId]) {
+                    originalPrice += SERVICE_PRICES[serviceId];
+                    if (servicesList) servicesList += ', ';
+                    servicesList += SERVICE_NAMES[serviceId];
+                }
+            });
+            if (currentBooking.selectedServices.includes('fullstack') && currentBooking.backendLanguage) {
+                originalPrice += BACKEND_PRICES[currentBooking.backendLanguage] || 0;
+                servicesList += ` (${currentBooking.backendLanguage.toUpperCase()})`;
+            }
+            const discountedPrice = originalPrice * (1 - STUDENT_DISCOUNT);
+            currentBooking.originalPrice = originalPrice;
+            currentBooking.discountedPrice = discountedPrice;
+            document.getElementById('priceAmount').textContent = `₹${Math.round(discountedPrice).toLocaleString()}`;
+            document.getElementById('selectedServices').value = currentBooking.selectedServices.join(',');
+            document.getElementById('selectedBackend').value = currentBooking.backendLanguage;
+            document.getElementById('totalPrice').value = discountedPrice;
+        }
+
+        function setActiveNav(page) {
+            document.querySelectorAll('.nav-menu a').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                if(link.innerHTML.includes(page === 'home' ? 'Home' : page === 'services' ? 'Services' : page === 'offers' ? 'Offers' : 'Help')) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        function showNavPopup(page) {
+            setActiveNav(page);
+            const navPopup = document.getElementById('navPopup');
+            const icon = document.getElementById('navPopupIcon');
+            const title = document.getElementById('navPopupTitle');
+            const message = document.getElementById('navPopupMessage');
+            switch(page) {
+                case 'home':
+                    icon.innerHTML = '<i class="fas fa-home"></i>';
+                    title.innerHTML = 'Welcome to Craft It Tech!';
+                    message.innerHTML = 'Platform for student projects. Start by selecting your services!';
+                    break;
+                case 'services':
+                    icon.innerHTML = '<i class="fas fa-cogs"></i>';
+                    title.innerHTML = 'Tech Services';
+                    message.innerHTML = 'We offer Website Dev, Dashboard Creation, Presentations, Essays, and Content Generation. All with 20% student discount!';
+                    break;
+                case 'offers':
+                    icon.innerHTML = '<i class="fas fa-graduation-cap"></i>';
+                    title.innerHTML = 'Student Offers';
+                    message.innerHTML = '20% off on first project, free consultation, and bulk discounts on multiple services!';
+                    break;
+                case 'help':
+                    icon.innerHTML = '<i class="fas fa-question-circle"></i>';
+                    title.innerHTML = 'Need Help?';
+                    message.innerHTML = 'Contact creator at +91 6006573367 or email craftitsite@gmail.com';
+                    break;
+            }
+            navPopup.classList.add('active');
+        }
+
+        function showWhatsAppPopup() { document.getElementById('whatsappPopup').classList.add('active'); }
+        function showOfferPopup() { document.getElementById('offerPopup').classList.add('active'); }
+        function showStudentProfilePopup() {
+            document.getElementById('profileName').textContent = currentBooking.name || 'craftit';
+            document.getElementById('profileEmail').textContent = currentBooking.email || 'craftitsite@gmail.com';
+            document.getElementById('profilePopup').classList.add('active');
+        }
+        function showTechPopup(tech) {
+            const techPopup = document.getElementById('techPopup');
+            const icon = document.getElementById('techPopupIcon');
+            const title = document.getElementById('techPopupTitle');
+            const message = document.getElementById('techPopupMessage');
+            const techInfo = {
+                'react': { icon: '<i class="fab fa-react"></i>', title: 'React.js', msg: 'A JavaScript library for building user interfaces.' },
+                'vue': { icon: '<i class="fab fa-vuejs"></i>', title: 'Vue.js', msg: 'The Progressive JavaScript Framework.' },
+                'angular': { icon: '<i class="fab fa-angular"></i>', title: 'Angular', msg: 'Platform for building mobile and desktop web applications.' },
+                'node': { icon: '<i class="fab fa-node"></i>', title: 'Node.js', msg: 'JavaScript runtime built on Chrome\'s V8 engine.' },
+                'python': { icon: '<i class="fab fa-python"></i>', title: 'Python', msg: 'Powerful language for data science and web development.' },
+                'mongodb': { icon: '<i class="fas fa-database"></i>', title: 'MongoDB', msg: 'NoSQL database with flexible JSON-like documents.' },
+                'mysql': { icon: '<i class="fas fa-database"></i>', title: 'MySQL', msg: 'Popular relational database management system.' }
+            };
+            if (techInfo[tech]) {
+                icon.innerHTML = techInfo[tech].icon;
+                title.innerHTML = techInfo[tech].title;
+                message.innerHTML = techInfo[tech].msg;
+            }
+            techPopup.classList.add('active');
+        }
+        function showHelpPopup() { showNavPopup('help'); }
+        function closePopup(popupId) { document.getElementById(popupId).classList.remove('active'); }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            if (!validateForm()) { showToast('Please fill all required fields correctly', 'error'); return; }
+            if (currentBooking.selectedServices.length === 0) { showToast('Please select at least one service', 'warning'); return; }
+            showLoading('Creating your project order...');
+            currentBooking = {
+                ...currentBooking,
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                college: document.getElementById('college').value,
+                description: document.getElementById('description').value
+            };
+            try {
+                await simulateOrderCreation();
+                const orderId = 'CRAFT_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6).toUpperCase();
+                currentOrder = { id: orderId, amount: currentBooking.discountedPrice };
+                generateQRCode(orderId, currentBooking.discountedPrice);
+                document.getElementById('orderId').textContent = orderId;
+                let servicesList = '';
+                currentBooking.selectedServices.forEach(serviceId => {
+                    if (servicesList) servicesList += ', ';
+                    servicesList += SERVICE_NAMES[serviceId];
+                });
+                if (currentBooking.selectedServices.includes('fullstack') && currentBooking.backendLanguage) {
+                    servicesList += ` (${currentBooking.backendLanguage.toUpperCase()})`;
+                }
+                document.getElementById('orderServices').textContent = servicesList;
+                document.getElementById('orderBackend').textContent = currentBooking.backendLanguage ? currentBooking.backendLanguage.toUpperCase() : 'N/A';
+                document.getElementById('orderSubtotal').textContent = `₹${Math.round(currentBooking.originalPrice).toLocaleString()}`;
+                document.getElementById('orderTotal').textContent = `₹${Math.round(currentBooking.discountedPrice).toLocaleString()}`;
+                document.getElementById('instructionAmount').textContent = Math.round(currentBooking.discountedPrice).toLocaleString();
+                document.getElementById('upiAmount').textContent = Math.round(currentBooking.discountedPrice).toLocaleString();
+                goToStep(2);
+                showToast('Order created! Choose your payment method', 'success');
+            } catch (error) { showToast('Error creating order. Please try again.', 'error'); }
+            finally { hideLoading(); }
+        }
+
+        function simulateOrderCreation() { return new Promise(resolve => setTimeout(resolve, 1500)); }
+
+        function generateQRCode(orderId, amount) {
+            const qrCanvas = document.getElementById('qrCanvas');
+            qrCanvas.innerHTML = '';
+            const upiString = `upi://pay?pa=${CREATOR_UPI_ID}&pn=Craft%20It&am=${Math.round(amount)}&cu=INR&tn=${orderId}`;
+            QRCode.toCanvas(upiString, { width: 200, margin: 2, color: { dark: '#00d9ff', light: '#ffffff' } }, function(error, canvas) {
+                if (error) { console.error('QR Generation Error:', error); qrCanvas.innerHTML = '<p style="color: red;">Error generating QR code</p>'; }
+                else { qrCanvas.appendChild(canvas); }
+            });
+        }
+
+        function validateForm() {
+            let isValid = true;
+            const requiredFields = ['name', 'email', 'phone', 'description'];
+            requiredFields.forEach(field => {
+                const input = document.getElementById(field);
+                if (!input.value.trim()) { input.classList.add('error'); isValid = false; }
+            });
+            if (currentBooking.selectedServices.length === 0) { showToast('Please select at least one service', 'warning'); isValid = false; }
+            if (currentBooking.selectedServices.includes('fullstack') && !currentBooking.backendLanguage) {
+                showToast('Please select a backend language for Full Stack Website', 'warning'); isValid = false;
+            }
+            const email = document.getElementById('email');
+            if (email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { email.classList.add('error'); isValid = false; }
+            const phone = document.getElementById('phone');
+            if (phone.value && !/^[6-9]\d{9}$/.test(phone.value.replace(/[^0-9]/g, ''))) { phone.classList.add('error'); isValid = false; }
+            return isValid;
+        }
+
+        function handleInvalidInput(e) { e.target.classList.add('error'); }
+        function removeErrorStyle(e) { e.target.classList.remove('error'); }
+        function saveUserUpiId() {
+            const userUpiInput = document.getElementById('userUpiId');
+            userSavedUpiId = userUpiInput.value.trim();
+            if (userSavedUpiId) showToast('Your UPI ID saved successfully!', 'success');
+            else showToast('Please enter a valid UPI ID', 'warning');
+        }
+
+        function sendSMSToCreator(bookingDetails) { return new Promise(resolve => { setTimeout(() => { showToast(`SMS notification sent to creator at ${CREATOR_PHONE}`, 'success'); resolve(); }, 1000); }); }
+        function sendEmailToCreator(bookingDetails) { return new Promise(resolve => { setTimeout(() => { showToast(`Email notification sent to creator at ${CREATOR_EMAIL}`, 'success'); resolve(); }, 1000); }); }
+
+        async function verifyPayment() {
+            if (selectedPaymentMethod === 'qr' && !document.getElementById('qrCanvas').hasChildNodes()) {
+                showToast('QR code not generated. Please try again.', 'error'); return;
+            }
+            showLoading('Verifying your payment...');
+            try {
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                const paymentId = 'PAY_' + Math.random().toString(36).substr(2, 12).toUpperCase();
+                let servicesList = '';
+                currentBooking.selectedServices.forEach(serviceId => {
+                    if (servicesList) servicesList += ', ';
+                    servicesList += SERVICE_NAMES[serviceId];
+                });
+                if (currentBooking.selectedServices.includes('fullstack') && currentBooking.backendLanguage) {
+                    servicesList += ` (${currentBooking.backendLanguage.toUpperCase()})`;
+                }
+                document.getElementById('summaryName').textContent = currentBooking.name;
+                document.getElementById('summaryEmail').textContent = currentBooking.email;
+                document.getElementById('summaryPhone').textContent = currentBooking.phone;
+                document.getElementById('summaryCollege').textContent = currentBooking.college || 'Not provided';
+                document.getElementById('summaryServices').textContent = servicesList;
+                document.getElementById('summaryBackend').textContent = currentBooking.backendLanguage ? currentBooking.backendLanguage.toUpperCase() : 'N/A';
+                document.getElementById('summaryAmount').textContent = `₹${Math.round(currentBooking.discountedPrice).toLocaleString()}`;
+                document.getElementById('summaryPaymentId').textContent = paymentId;
+                document.getElementById('summaryUserUpi').textContent = userSavedUpiId || 'Not provided';
+                document.getElementById('summaryPaymentMethod').textContent = selectedPaymentMethod === 'qr' ? 'QR Code' : (selectedRedirectApp ? selectedRedirectApp.toUpperCase() : 'UPI App');
+                const bookingDetails = {
+                    orderId: currentOrder.id, paymentId, customerName: currentBooking.name, customerEmail: currentBooking.email,
+                    customerPhone: currentBooking.phone, customerCollege: currentBooking.college || 'Not provided',
+                    selectedServices: servicesList, backendLanguage: currentBooking.backendLanguage || 'N/A',
+                    description: currentBooking.description, amount: currentBooking.discountedPrice,
+                    bookingDate: new Date().toLocaleString(), paymentMethod: selectedPaymentMethod === 'qr' ? 'QR Code' : (selectedRedirectApp ? selectedRedirectApp : 'UPI'),
+                    userUpiId: userSavedUpiId || 'Not provided', creatorUpiId: CREATOR_UPI_ID
+                };
+                await Promise.all([sendSMSToCreator(bookingDetails), sendEmailToCreator(bookingDetails)]);
+                sendConfirmationEmail();
+                paymentVerified = true;
+                document.getElementById('finalConfirmationPopup').classList.add('active');
+            } catch (error) { showToast('Payment verification failed', 'error'); }
+            finally { hideLoading(); }
+        }
+
+        function confirmPaymentReceived() {
+            if (!paymentVerified) { showToast('Please verify your payment first!', 'warning'); return; }
+            document.getElementById('finalConfirmationPopup').classList.add('active');
+        }
+
+        function goToStep3() {
+            closePopup('finalConfirmationPopup');
+            goToStep(3);
+            setTimeout(() => { document.getElementById('pdfReceiptPopup').classList.add('active'); }, 500);
+            showToast('Payment confirmed! Download PDF receipt and fill mandatory form.', 'success');
+        }
+
+        function sendConfirmationEmail() { showToast(`Confirmation email sent to ${currentBooking.email}`, 'success'); }
+
+        function downloadPDFReceipt() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+            const primaryColor = [0, 217, 255];
+            const secondaryColor = [0, 255, 136];
+            const whatsappColor = [37, 211, 102];
+            doc.setGState(new doc.GState({ opacity: 0.1 }));
+            doc.setFontSize(60);
+            doc.setTextColor(200, 200, 200);
+            doc.text("Craft It", 105, 140, { align: 'center', angle: 45, rendering: 'fill' });
+            doc.setGState(new doc.GState({ opacity: 1 }));
+            doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.rect(0, 0, 210, 40, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(24);
+            doc.setFont("helvetica", "bold");
+            doc.text("CRAFT IT", 105, 20, { align: 'center' });
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "normal");
+            doc.text("Payment Receipt", 105, 30, { align: 'center' });
+            doc.setDrawColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.setLineWidth(0.5);
+            doc.rect(15, 45, 180, 240);
+            doc.setFontSize(16);
+            doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.setFont("helvetica", "bold");
+            doc.text("PAYMENT RECEIPT", 105, 55, { align: 'center' });
+            let yPos = 70;
+            const leftCol = 25, rightCol = 120;
+            function addDetailRow(label, value, y, isHighlight = false) {
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(75, 85, 99);
+                doc.text(label, leftCol, y);
+                doc.setFont("helvetica", "normal");
+                if (isHighlight) doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
+                else doc.setTextColor(0, 0, 0);
+                const splitValue = doc.splitTextToSize(value.toString(), 80);
+                doc.text(splitValue, rightCol, y);
+                return splitValue.length * 5;
+            }
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.text("BOOKING DETAILS", 20, yPos);
+            yPos += 8;
+            yPos += addDetailRow("Order ID:", currentOrder?.id || 'N/A', yPos);
+            yPos += 5;
+            yPos += addDetailRow("Date:", new Date().toLocaleString(), yPos);
+            yPos += 10;
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.text("CUSTOMER DETAILS", 20, yPos);
+            yPos += 8;
+            yPos += addDetailRow("Name:", currentBooking.name, yPos);
+            yPos += 5;
+            yPos += addDetailRow("Email:", currentBooking.email, yPos);
+            yPos += 5;
+            yPos += addDetailRow("Phone:", currentBooking.phone, yPos);
+            yPos += 5;
+            yPos += addDetailRow("College:", currentBooking.college || 'Not provided', yPos);
+            yPos += 10;
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.text("SERVICE DETAILS", 20, yPos);
+            yPos += 8;
+            let servicesText = '';
+            currentBooking.selectedServices.forEach((serviceId, index) => {
+                servicesText += `${index + 1}. ${SERVICE_NAMES[serviceId]}`;
+                if (serviceId === 'fullstack' && currentBooking.backendLanguage) servicesText += ` (${currentBooking.backendLanguage.toUpperCase()})`;
+                servicesText += '\n';
+            });
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(0, 0, 0);
+            const serviceLines = doc.splitTextToSize(servicesText, 170);
+            doc.text(serviceLines, 25, yPos);
+            yPos += (serviceLines.length * 5) + 5;
+            if (currentBooking.description) {
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(75, 85, 99);
+                doc.text("Description:", 25, yPos);
+                yPos += 5;
+                doc.setFont("helvetica", "normal");
+                const descLines = doc.splitTextToSize(currentBooking.description, 160);
+                doc.text(descLines, 25, yPos);
+                yPos += (descLines.length * 5) + 10;
+            }
+            doc.setFillColor(249, 250, 251);
+            doc.rect(20, yPos - 5, 170, 60, 'F');
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.text("PAYMENT DETAILS", 25, yPos);
+            yPos += 8;
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(75, 85, 99);
+            doc.text("Original Price:", 25, yPos);
+            doc.text("Student Discount (20%):", 25, yPos + 6);
+            doc.text("Total Paid:", 25, yPos + 12);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(0, 0, 0);
+            doc.text(`₹${Math.round(currentBooking.originalPrice).toLocaleString()}`, 120, yPos);
+            doc.text(`-₹${Math.round(currentBooking.originalPrice * 0.2).toLocaleString()}`, 120, yPos + 6);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
+            doc.text(`₹${Math.round(currentBooking.discountedPrice).toLocaleString()}`, 120, yPos + 12);
+            yPos += 20;
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(75, 85, 99);
+            doc.text(`Payment ID: ${document.getElementById('summaryPaymentId').textContent}`, 25, yPos);
+            yPos += 5;
+            doc.text(`Payment Method: ${selectedPaymentMethod === 'qr' ? 'QR Code' : (selectedRedirectApp ? selectedRedirectApp.toUpperCase() : 'UPI App')}`, 25, yPos);
+            yPos += 5;
+            doc.text(`Creator UPI: ${CREATOR_UPI_ID}`, 25, yPos);
+            yPos += 5;
+            doc.text(`Your UPI: ${userSavedUpiId || 'Not provided'}`, 25, yPos);
+            yPos += 10;
+            doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.rect(0, 270, 210, 30, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "bold");
+            doc.text("Thank you for choosing Craft It!", 105, 280, { align: 'center' });
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "normal");
+            doc.text("Your work will begin within 24 hours.", 105, 287, { align: 'center' });
+            doc.setFillColor(whatsappColor[0], whatsappColor[1], whatsappColor[2]);
+            doc.rect(20, 250, 170, 12, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "bold");
+            doc.text(`Send this receipt to WhatsApp: +91 ${WHATSAPP_NUMBER}`, 105, 258, { align: 'center' });
+            doc.setTextColor(200, 200, 200);
+            doc.setFontSize(8);
+            doc.text(`Creator: +91 ${CREATOR_PHONE} | ${CREATOR_EMAIL}`, 105, 295, { align: 'center' });
+            doc.setDrawColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.setLineWidth(0.2);
+            doc.rect(5, 5, 200, 287);
+            doc.save(`CraftIt_Receipt_${currentOrder?.id || Date.now()}.pdf`);
+            showToast('PDF Receipt downloaded successfully!', 'success');
+            closePopup('pdfReceiptPopup');
+            setTimeout(() => { showCompulsoryFormPopup(); }, 500);
+        }
+
+        function showCompulsoryFormPopup() { document.getElementById('compulsoryFormPopup').classList.add('active'); }
+        function confirmFormSubmitted() { isFormSubmitted = true; closePopup('compulsoryFormPopup'); showToast('Thank you for submitting the form!', 'success'); }
+
+        function goToStep(step) {
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            document.getElementById(`step${step}`).classList.add('active');
+            document.querySelectorAll('.progress-step').forEach((el, index) => {
+                if (index + 1 <= step) el.classList.add('active');
+                else el.classList.remove('active');
+            });
+        }
+
+        function resetBooking() {
+            if (!isFormSubmitted) {
+                showToast('Please download the receipt and submit the mandatory form first!', 'warning');
+                showCompulsoryFormPopup();
+                return;
+            }
+            document.getElementById('bookingForm').reset();
+            document.getElementById('priceAmount').textContent = '₹0';
+            document.getElementById('backendLanguageSection').classList.remove('visible');
+            currentBooking.selectedServices = [];
+            document.querySelectorAll('.sub-dropdown-item').forEach(item => item.classList.remove('selected'));
+            updateSelectedServicesTags();
+            document.querySelectorAll('.backend-option').forEach(opt => opt.classList.remove('selected'));
+            currentBooking = { id: null, name: '', email: '', phone: '', college: '', selectedServices: [], backendLanguage: '', description: '', originalPrice: 0, discountedPrice: 0 };
+            selectedUPIApp = null; selectedPaymentMethod = 'qr'; selectedRedirectApp = null; userSavedUpiId = ''; paymentVerified = false; isFormSubmitted = false;
+            document.getElementById('userUpiId').value = '';
+            document.getElementById('method-qr').classList.add('active');
+            document.getElementById('method-upi').classList.remove('active');
+            document.getElementById('payment-qr').classList.add('active');
+            document.getElementById('payment-upi').classList.remove('active');
+            document.querySelectorAll('.redirect-option').forEach(opt => opt.classList.remove('selected'));
+            goToStep(1);
+        }
+
+        function showLoading(message = 'Processing...') {
+            document.getElementById('loadingMessage').textContent = message;
+            document.getElementById('loadingOverlay').classList.add('active');
+        }
+        function hideLoading() { document.getElementById('loadingOverlay').classList.remove('active'); }
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+        function copyUPIId() { navigator.clipboard.writeText(CREATOR_UPI_ID).then(() => showToast('Creator UPI ID copied!', 'success')); }
+        function shareBooking() {
+            let servicesList = '';
+            currentBooking.selectedServices.forEach(serviceId => { if (servicesList) servicesList += ', '; servicesList += SERVICE_NAMES[serviceId]; });
+            if (currentBooking.selectedServices.includes('fullstack') && currentBooking.backendLanguage) servicesList += ` (${currentBooking.backendLanguage.toUpperCase()})`;
+            if (navigator.share) {
+                navigator.share({ title: 'Craft It Project Booking', text: `I just booked ${servicesList} on Craft It!`, url: window.location.href })
+                    .then(() => showToast('Shared!', 'success')).catch(() => showToast('Cancelled', 'warning'));
+            } else showToast('Sharing not supported', 'warning');
+        }
+        function callCreator() { window.location.href = `tel:+91${CREATOR_PHONE}`; }
+        function emailCreator() {
+            let servicesList = '';
+            currentBooking.selectedServices.forEach(serviceId => { if (servicesList) servicesList += ', '; servicesList += SERVICE_NAMES[serviceId]; });
+            if (currentBooking.selectedServices.includes('fullstack') && currentBooking.backendLanguage) servicesList += ` (${currentBooking.backendLanguage.toUpperCase()})`;
+            const subject = encodeURIComponent('New Project Booking Inquiry');
+            const body = encodeURIComponent(`Hello Creator,\n\nI have a question about my project booking.\n\nName: ${currentBooking.name}\nPhone: ${currentBooking.phone}\nServices: ${servicesList}\nCreator UPI: ${CREATOR_UPI_ID}\nMy UPI: ${userSavedUpiId || 'Not provided'}`);
+            window.location.href = `mailto:${CREATOR_EMAIL}?subject=${subject}&body=${body}`;
+        }
+    </script>
+</body>
+  </html>
