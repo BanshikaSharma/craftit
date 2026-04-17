@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Craft It -Student Platform</title>
+    <title>Craft It - Tech Student Platform</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
@@ -766,6 +767,44 @@
             font-size: 0.8rem;
             margin-left: 0.25rem;
         }
+
+        /* Currency Dropdown - NEW */
+        .currency-dropdown {
+            margin: 1rem 0;
+        }
+        .currency-select-btn {
+            background: rgba(10, 14, 39, 0.6);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 200px;
+        }
+        .currency-options {
+            position: absolute;
+            background: #1a1f3a;
+            border: 1px solid rgba(0,217,255,0.3);
+            border-radius: 12px;
+            margin-top: 0.25rem;
+            display: none;
+            z-index: 100;
+            min-width: 200px;
+        }
+        .currency-options.show { display: block; }
+        .currency-option {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .currency-option:hover { background: rgba(0,217,255,0.1); }
+        .currency-option.selected { background: var(--primary); color: var(--dark); }
 
         /* Price Card */
         .price-card {
@@ -2026,7 +2065,7 @@ div {
         <!-- Hero Section -->
         <div class="hero-section">
             <h2>Build Your Future with <span class="highlight">Craft It </span></h2>
-            <p>Student Project Platform • Websites • Dashboards • Presentations • Essays • Content • Many more</p>
+            <p>Student Project Platform • Websites • Dashboards • Presentations • Essays • Content • Digital Design • Print • AI Tools • Video Editing • Many more</p>
             <div class="student-offer" onclick="showOfferPopup()">
                 <i class="fas fa-microchip"></i> Student Offer: Get 20% off on your first project
             </div>
@@ -2084,7 +2123,7 @@ div {
                             </div>
                         </div>
 
-                        <!-- Project Type Dropdown -->
+                        <!-- Project Type Dropdown - ENHANCED WITH ALL NEW SERVICES -->
                         <div class="form-group">
                             <label><i class="fas fa-code-branch"></i> Select Project Services *</label>
                             <div class="custom-dropdown">
@@ -2102,17 +2141,11 @@ div {
                                         <div class="sub-dropdown" id="sub-web">
                                             <div class="sub-dropdown-items">
                                                 <div class="sub-dropdown-item" onclick="selectService('frontend', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-code"></i>
-                                                        <span>Frontend Website</span>
-                                                    </div>
+                                                    <div class="item-info"><i class="fas fa-code"></i><span>Frontend Website</span></div>
                                                     <span class="item-price">₹5,000</span>
                                                 </div>
                                                 <div class="sub-dropdown-item" onclick="selectService('fullstack', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-layer-group"></i>
-                                                        <span>Full Stack Website</span>
-                                                    </div>
+                                                    <div class="item-info"><i class="fas fa-layer-group"></i><span>Full Stack Website</span></div>
                                                     <span class="item-price">₹20,000</span>
                                                 </div>
                                             </div>
@@ -2127,147 +2160,117 @@ div {
                                         </div>
                                         <div class="sub-dropdown" id="sub-dashboard">
                                             <div class="sub-dropdown-items">
-                                                <div class="sub-dropdown-item" onclick="selectService('dashboard-basic', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-chart-pie"></i>
-                                                        <span>Basic Dashboard</span>
-                                                    </div>
-                                                    <span class="item-price">₹8,000</span>
-                                                </div>
-                                                <div class="sub-dropdown-item" onclick="selectService('dashboard-analytics', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-chart-bar"></i>
-                                                        <span>Analytics Dashboard</span>
-                                                    </div>
-                                                    <span class="item-price">₹15,000</span>
-                                                </div>
-                                                <div class="sub-dropdown-item" onclick="selectService('dashboard-interactive', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-chart-line"></i>
-                                                        <span>Interactive Dashboard</span>
-                                                    </div>
-                                                    <span class="item-price">₹20,000</span>
-                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('dashboard-basic', event)"><div class="item-info"><i class="fas fa-chart-pie"></i><span>Basic Dashboard</span></div><span class="item-price">₹8,000</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('dashboard-analytics', event)"><div class="item-info"><i class="fas fa-chart-bar"></i><span>Analytics Dashboard</span></div><span class="item-price">₹15,000</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('dashboard-interactive', event)"><div class="item-info"><i class="fas fa-chart-line"></i><span>Interactive Dashboard</span></div><span class="item-price">₹20,000</span></div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- Presentation Slides -->
+                                    <!-- Digital Design & Office Suite -->
+                                    <div class="dropdown-category" onclick="toggleSubDropdown('digital')" id="category-digital">
+                                        <div class="dropdown-category-header">
+                                            <h4><i class="fas fa-paintbrush"></i> Digital Design & Office</h4>
+                                            <i class="fas fa-chevron-right"></i>
+                                        </div>
+                                        <div class="sub-dropdown" id="sub-digital">
+                                            <div class="sub-dropdown-items">
+                                                <div class="sub-dropdown-item" onclick="selectService('digital_design', event)"><div class="item-info"><i class="fas fa-palette"></i><span>Digital Design</span></div><span class="item-price">₹2,500</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('sheets', event)"><div class="item-info"><i class="fas fa-table"></i><span>Sheets (Excel/Sheets)</span></div><span class="item-price">₹1,500</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('docs', event)"><div class="item-info"><i class="fas fa-file-word"></i><span>Docs (Documentation)</span></div><span class="item-price">₹1,200</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('whiteboards', event)"><div class="item-info"><i class="fas fa-chalkboard"></i><span>Whiteboards</span></div><span class="item-price">₹1,800</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Presentations & Social Media -->
                                     <div class="dropdown-category" onclick="toggleSubDropdown('presentation')" id="category-presentation">
                                         <div class="dropdown-category-header">
-                                            <h4><i class="fas fa-file-powerpoint"></i> Presentation Studio</h4>
+                                            <h4><i class="fas fa-file-powerpoint"></i> Presentations & Social</h4>
                                             <i class="fas fa-chevron-right"></i>
                                         </div>
                                         <div class="sub-dropdown" id="sub-presentation">
                                             <div class="sub-dropdown-items">
-                                                <div class="sub-dropdown-item" onclick="selectService('presentation-basic', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-file-powerpoint"></i>
-                                                        <span>Basic Presentation</span>
-                                                    </div>
-                                                    <span class="item-price">₹2,000</span>
-                                                </div>
-                                                <div class="sub-dropdown-item" onclick="selectService('presentation-premium', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-star"></i>
-                                                        <span>Premium Presentation</span>
-                                                    </div>
-                                                    <span class="item-price">₹5,000</span>
-                                                </div>
-                                                <div class="sub-dropdown-item" onclick="selectService('presentation-animated', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-film"></i>
-                                                        <span>Animated Presentation</span>
-                                                    </div>
-                                                    <span class="item-price">₹8,000</span>
-                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('presentation-basic', event)"><div class="item-info"><i class="fas fa-file-powerpoint"></i><span>Presentations</span></div><span class="item-price">₹3,000</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('social_media', event)"><div class="item-info"><i class="fas fa-hashtag"></i><span>Social Media Content</span></div><span class="item-price">₹2,500</span></div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- Essay Writing -->
-                                    <div class="dropdown-category" onclick="toggleSubDropdown('essay')" id="category-essay">
+                                    <!-- Photo & Video Editing -->
+                                    <div class="dropdown-category" onclick="toggleSubDropdown('media')" id="category-media">
                                         <div class="dropdown-category-header">
-                                            <h4><i class="fas fa-pen-fancy"></i> Essay AI</h4>
+                                            <h4><i class="fas fa-camera"></i> Photo & Video Editing</h4>
                                             <i class="fas fa-chevron-right"></i>
                                         </div>
-                                        <div class="sub-dropdown" id="sub-essay">
+                                        <div class="sub-dropdown" id="sub-media">
                                             <div class="sub-dropdown-items">
-                                                <div class="sub-dropdown-item" onclick="selectService('essay-short', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-file-alt"></i>
-                                                        <span>Short Essay (500 words)</span>
-                                                    </div>
-                                                    <span class="item-price">₹1,000</span>
-                                                </div>
-                                                <div class="sub-dropdown-item" onclick="selectService('essay-medium', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-file-lines"></i>
-                                                        <span>Medium Essay (1000 words)</span>
-                                                    </div>
-                                                    <span class="item-price">₹1,800</span>
-                                                </div>
-                                                <div class="sub-dropdown-item" onclick="selectService('essay-long', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-file"></i>
-                                                        <span>Long Essay (2000 words)</span>
-                                                    </div>
-                                                    <span class="item-price">₹3,000</span>
-                                                </div>
-                                                <div class="sub-dropdown-item" onclick="selectService('essay-research', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-microscope"></i>
-                                                        <span>Research Paper</span>
-                                                    </div>
-                                                    <span class="item-price">₹5,000</span>
-                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('photo_editor', event)"><div class="item-info"><i class="fas fa-crop"></i><span>Photo Editor</span></div><span class="item-price">₹1,000</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('bg_remover', event)"><div class="item-info"><i class="fas fa-eraser"></i><span>Background Remover</span></div><span class="item-price">₹800</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('photo_collages', event)"><div class="item-info"><i class="fas fa-images"></i><span>Photo Collages</span></div><span class="item-price">₹1,000</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('mockups', event)"><div class="item-info"><i class="fas fa-mockup"></i><span>Mockups</span></div><span class="item-price">₹2,000</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('image_enhancer', event)"><div class="item-info"><i class="fas fa-magic"></i><span>Image Enhancer</span></div><span class="item-price">₹1,200</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('video_editor', event)"><div class="item-info"><i class="fas fa-video"></i><span>Video Editor</span></div><span class="item-price">₹4,000</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('youtube_editor', event)"><div class="item-info"><i class="fab fa-youtube"></i><span>YouTube Video Editor</span></div><span class="item-price">₹5,000</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('video_trimmer', event)"><div class="item-info"><i class="fas fa-cut"></i><span>Video Trimmer</span></div><span class="item-price">₹1,500</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('convert_mp4', event)"><div class="item-info"><i class="fas fa-file-video"></i><span>Convert Videos to MP4</span></div><span class="item-price">₹1,000</span></div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- Content Generation -->
-                                    <div class="dropdown-category" onclick="toggleSubDropdown('content')" id="category-content">
+                                    <!-- Print Design & Merchandise -->
+                                    <div class="dropdown-category" onclick="toggleSubDropdown('print')" id="category-print">
                                         <div class="dropdown-category-header">
-                                            <h4><i class="fas fa-robot"></i> Content Generator</h4>
+                                            <h4><i class="fas fa-print"></i> Print Design & Merchandise</h4>
                                             <i class="fas fa-chevron-right"></i>
                                         </div>
-                                        <div class="sub-dropdown" id="sub-content">
+                                        <div class="sub-dropdown" id="sub-print">
                                             <div class="sub-dropdown-items">
-                                                <div class="sub-dropdown-item" onclick="selectService('content-blog', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-blog"></i>
-                                                        <span>Blog Post</span>
-                                                    </div>
-                                                    <span class="item-price">₹800</span>
-                                                </div>
-                                                <div class="sub-dropdown-item" onclick="selectService('content-social', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-hashtag"></i>
-                                                        <span>Social Media Content</span>
-                                                    </div>
-                                                    <span class="item-price">₹500</span>
-                                                </div>
-                                                <div class="sub-dropdown-item" onclick="selectService('content-product', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-tag"></i>
-                                                        <span>Product Description</span>
-                                                    </div>
-                                                    <span class="item-price">₹600</span>
-                                                </div>
-                                                <div class="sub-dropdown-item" onclick="selectService('content-email', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-envelope"></i>
-                                                        <span>Email Newsletter</span>
-                                                    </div>
-                                                    <span class="item-price">₹700</span>
-                                                </div>
-                                                <div class="sub-dropdown-item" onclick="selectService('content-seo', event)">
-                                                    <div class="item-info">
-                                                        <i class="fas fa-search"></i>
-                                                        <span>SEO Content</span>
-                                                    </div>
-                                                    <span class="item-price">₹1,200</span>
-                                                </div>
+                                                <div class="sub-dropdown-item" onclick="selectService('print_design', event)"><div class="item-info"><i class="fas fa-print"></i><span>Print Design</span></div><span class="item-price">₹2,000</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('business_cards', event)"><div class="item-info"><i class="fas fa-id-card"></i><span>Business Cards</span></div><span class="item-price">₹800</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('invitations', event)"><div class="item-info"><i class="fas fa-envelope-open-text"></i><span>Invitations</span></div><span class="item-price">₹1,000</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('flyers', event)"><div class="item-info"><i class="fas fa-leaf"></i><span>Flyers</span></div><span class="item-price">₹1,200</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('brochures', event)"><div class="item-info"><i class="fas fa-book"></i><span>Brochures</span></div><span class="item-price">₹1,800</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('tshirts', event)"><div class="item-info"><i class="fas fa-tshirt"></i><span>T-shirts</span></div><span class="item-price">₹1,500</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('mugs', event)"><div class="item-info"><i class="fas fa-mug-hot"></i><span>Mugs</span></div><span class="item-price">₹800</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('stickers', event)"><div class="item-info"><i class="fas fa-tag"></i><span>Stickers</span></div><span class="item-price">₹500</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('hoodies', event)"><div class="item-info"><i class="fas fa-tshirt"></i><span>Hoodies</span></div><span class="item-price">₹2,000</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('labels', event)"><div class="item-info"><i class="fas fa-tag"></i><span>Labels</span></div><span class="item-price">₹600</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('posters', event)"><div class="item-info"><i class="fas fa-poster"></i><span>Posters</span></div><span class="item-price">₹1,200</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- AI & Advanced Tools -->
+                                    <div class="dropdown-category" onclick="toggleSubDropdown('ai')" id="category-ai">
+                                        <div class="dropdown-category-header">
+                                            <h4><i class="fas fa-robot"></i> AI Tools & Generators</h4>
+                                            <i class="fas fa-chevron-right"></i>
+                                        </div>
+                                        <div class="sub-dropdown" id="sub-ai">
+                                            <div class="sub-dropdown-items">
+                                                <div class="sub-dropdown-item" onclick="selectService('ai_image_gen', event)"><div class="item-info"><i class="fas fa-image"></i><span>AI Image Generator</span></div><span class="item-price">₹1,500</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('ai_photo_editor', event)"><div class="item-info"><i class="fas fa-wand-magic"></i><span>AI Photo Editor</span></div><span class="item-price">₹1,800</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('ai_art_gen', event)"><div class="item-info"><i class="fas fa-palette"></i><span>AI Art Generator</span></div><span class="item-price">₹2,000</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('ai_video_gen', event)"><div class="item-info"><i class="fas fa-video"></i><span>AI Video Generator</span></div><span class="item-price">₹2,500</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('text_to_speech', event)"><div class="item-info"><i class="fas fa-microphone-alt"></i><span>Text to Speech Voiceover</span></div><span class="item-price">₹1,800</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('ai_music_gen', event)"><div class="item-info"><i class="fas fa-music"></i><span>AI Music Generator</span></div><span class="item-price">₹2,000</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('draw', event)"><div class="item-info"><i class="fas fa-pencil-ruler"></i><span>Draw/Illustration</span></div><span class="item-price">₹2,500</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('logos', event)"><div class="item-info"><i class="fas fa-trademark"></i><span>Logos</span></div><span class="item-price">₹3,000</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- PDF & Websites -->
+                                    <div class="dropdown-category" onclick="toggleSubDropdown('webprint')" id="category-webprint">
+                                        <div class="dropdown-category-header">
+                                            <h4><i class="fas fa-globe"></i> Web & PDF Tools</h4>
+                                            <i class="fas fa-chevron-right"></i>
+                                        </div>
+                                        <div class="sub-dropdown" id="sub-webprint">
+                                            <div class="sub-dropdown-items">
+                                                <div class="sub-dropdown-item" onclick="selectService('websites', event)"><div class="item-info"><i class="fas fa-globe"></i><span>Websites</span></div><span class="item-price">₹15,000</span></div>
+                                                <div class="sub-dropdown-item" onclick="selectService('pdf_editor', event)"><div class="item-info"><i class="fas fa-file-pdf"></i><span>PDF Editor</span></div><span class="item-price">₹1,200</span></div>
                                             </div>
                                         </div>
                                     </div>
@@ -2318,6 +2321,31 @@ div {
                                 <div class="backend-option" onclick="selectBackendLanguage('go')" id="backend-go">
                                     <i class="fas fa-code"></i>
                                     <span>Go <small>+₹7,000</small></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Currency Dropdown Button - NEW FEATURE -->
+                        <div class="form-group currency-dropdown">
+                            <label><i class="fas fa-coins"></i> Select Currency</label>
+                            <div style="position: relative;">
+                                <div class="currency-select-btn" onclick="toggleCurrencyDropdown()">
+                                    <span id="selectedCurrencyText">💰 INR (₹)</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="currency-options" id="currencyOptions">
+                                    <div class="currency-option" data-currency="INR" data-symbol="₹" onclick="selectCurrency('INR', '₹')">
+                                        <span>🇮🇳</span> INR (₹) - Indian Rupee
+                                    </div>
+                                    <div class="currency-option" data-currency="USD" data-symbol="$" onclick="selectCurrency('USD', '$')">
+                                        <span>🇺🇸</span> USD ($) - US Dollar
+                                    </div>
+                                    <div class="currency-option" data-currency="EUR" data-symbol="€" onclick="selectCurrency('EUR', '€')">
+                                        <span>🇪🇺</span> EUR (€) - Euro
+                                    </div>
+                                    <div class="currency-option" data-currency="GBP" data-symbol="£" onclick="selectCurrency('GBP', '£')">
+                                        <span>🇬🇧</span> GBP (£) - British Pound
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2387,7 +2415,7 @@ div {
                                     <ol>
                                         <li>Open any UPI app on your device</li>
                                         <li>Scan the QR code above</li>
-                                        <li>Verify amount: ₹<span id="instructionAmount">0</span></li>
+                                        <li>Verify amount: <span id="instructionAmount">0</span></li>
                                         <li>Enter your UPI PIN to authenticate</li>
                                         <li>Click "Payment Complete" below</li>
                                     </ol>
@@ -2455,7 +2483,7 @@ div {
                                     <li>Enter your UPI ID (optional for tracking)</li>
                                     <li>Select your preferred UPI app</li>
                                     <li>You'll be redirected to the app</li>
-                                    <li>Verify amount: ₹<span id="upiAmount">0</span></li>
+                                    <li>Verify amount: <span id="upiAmount">0</span></li>
                                     <li>Complete the transaction</li>
                                     <li>Return and click "Payment Complete"</li>
                                 </ol>
@@ -2479,6 +2507,10 @@ div {
                             <div class="detail-item">
                                 <span class="detail-label">Backend:</span>
                                 <span class="detail-value" id="orderBackend">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Currency:</span>
+                                <span class="detail-value" id="orderCurrency">INR</span>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-label">Student Discount:</span>
@@ -2553,6 +2585,10 @@ div {
                         <div class="summary-row">
                             <span class="summary-label">Backend:</span>
                             <span class="summary-value" id="summaryBackend">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Currency:</span>
+                            <span class="summary-value" id="summaryCurrency">-</span>
                         </div>
                         <div class="summary-row">
                             <span class="summary-label">Amount Paid:</span>
@@ -2650,7 +2686,7 @@ div {
                 <i class="fas fa-mobile-alt"></i>
             </div>
             <h3 id="popupTitle">Google Pay Selected</h3>
-            <p id="popupMessage">Open Google Pay app and pay to UPI ID <strong>craft.it@ptyes</strong> for ₹<span id="popupAmount">0</span></p>
+            <p id="popupMessage">Open Google Pay app and pay to UPI ID <strong>craft.it@ptyes</strong> for <span id="popupAmount">0</span></p>
             <button class="btn btn-primary" onclick="closePopup('upiPopup')">
                 <i class="fas fa-check"></i> Got it
             </button>
@@ -2786,7 +2822,7 @@ div {
                 <i class="fas fa-check-circle"></i>
             </div>
             <h3>Payment Initiated!</h3>
-            <p id="paymentSuccessMessage">Your payment of ₹<span id="paymentSuccessAmount">0</span> has been initiated.</p>
+            <p id="paymentSuccessMessage">Your payment of <span id="paymentSuccessAmount">0</span> has been initiated.</p>
             <p style="font-size: 0.9rem; color: var(--gray-500); margin-top: 1rem;">Creator's UPI: <strong>craft.it@ptyes</strong></p>
             <p style="font-size: 0.9rem; color: var(--warning); margin-top: 0.5rem;">⚠️ Click "Confirm Payment" after completing in your app.</p>
             <button class="btn btn-primary" onclick="closePopup('paymentSuccessPopup')">
@@ -2915,16 +2951,21 @@ div {
         const WHATSAPP_NUMBER = '6006573367';
         const GOOGLE_FORM_URL = 'https://forms.gle/5R9TecEYuWNjBUSNA';
         
-        // Creator UPI ID - Updated to craft.it@ptyes
+        // Creator UPI ID
         const CREATOR_UPI_ID = 'craft.it@ptyes';
 
-        // Service Prices
+        // Service Prices - ENHANCED WITH ALL NEW SERVICES
         const SERVICE_PRICES = {
             'frontend': 5000, 'fullstack': 20000,
             'dashboard-basic': 8000, 'dashboard-analytics': 15000, 'dashboard-interactive': 20000,
-            'presentation-basic': 2000, 'presentation-premium': 5000, 'presentation-animated': 8000,
-            'essay-short': 1000, 'essay-medium': 1800, 'essay-long': 3000, 'essay-research': 5000,
-            'content-blog': 800, 'content-social': 500, 'content-product': 600, 'content-email': 700, 'content-seo': 1200,
+            'presentation-basic': 3000, 'social_media': 2500,
+            'digital_design': 2500, 'sheets': 1500, 'docs': 1200, 'whiteboards': 1800,
+            'photo_editor': 1000, 'bg_remover': 800, 'photo_collages': 1000, 'mockups': 2000, 'image_enhancer': 1200,
+            'video_editor': 4000, 'youtube_editor': 5000, 'video_trimmer': 1500, 'convert_mp4': 1000,
+            'print_design': 2000, 'business_cards': 800, 'invitations': 1000, 'flyers': 1200, 'brochures': 1800,
+            'tshirts': 1500, 'mugs': 800, 'stickers': 500, 'hoodies': 2000, 'labels': 600, 'posters': 1200,
+            'ai_image_gen': 1500, 'ai_photo_editor': 1800, 'ai_art_gen': 2000, 'ai_video_gen': 2500, 'text_to_speech': 1800, 'ai_music_gen': 2000,
+            'draw': 2500, 'logos': 3000, 'websites': 15000, 'pdf_editor': 1200,
             'other': 100
         };
 
@@ -2933,13 +2974,25 @@ div {
         const SERVICE_NAMES = {
             'frontend': 'Frontend Website', 'fullstack': 'Full Stack Website',
             'dashboard-basic': 'Basic Dashboard', 'dashboard-analytics': 'Analytics Dashboard', 'dashboard-interactive': 'Interactive Dashboard',
-            'presentation-basic': 'Basic Presentation', 'presentation-premium': 'Premium Presentation', 'presentation-animated': 'Animated Presentation',
-            'essay-short': 'Short Essay (500 words)', 'essay-medium': 'Medium Essay (1000 words)', 'essay-long': 'Long Essay (2000 words)', 'essay-research': 'Research Paper',
-            'content-blog': 'Blog Post', 'content-social': 'Social Media Content', 'content-product': 'Product Description', 'content-email': 'Email Newsletter', 'content-seo': 'SEO Content',
+            'presentation-basic': 'Presentations', 'social_media': 'Social Media Content',
+            'digital_design': 'Digital Design', 'sheets': 'Sheets', 'docs': 'Docs', 'whiteboards': 'Whiteboards',
+            'photo_editor': 'Photo Editor', 'bg_remover': 'Background Remover', 'photo_collages': 'Photo Collages', 'mockups': 'Mockups', 'image_enhancer': 'Image Enhancer',
+            'video_editor': 'Video Editor', 'youtube_editor': 'YouTube Video Editor', 'video_trimmer': 'Video Trimmer', 'convert_mp4': 'Convert Videos to MP4',
+            'print_design': 'Print Design', 'business_cards': 'Business Cards', 'invitations': 'Invitations', 'flyers': 'Flyers', 'brochures': 'Brochures',
+            'tshirts': 'T-shirts', 'mugs': 'Mugs', 'stickers': 'Stickers', 'hoodies': 'Hoodies', 'labels': 'Labels', 'posters': 'Posters',
+            'ai_image_gen': 'AI Image Generator', 'ai_photo_editor': 'AI Photo Editor', 'ai_art_gen': 'AI Art Generator', 'ai_video_gen': 'AI Video Generator', 'text_to_speech': 'Text to Speech Voiceover', 'ai_music_gen': 'AI Music Generator',
+            'draw': 'Draw/Illustration', 'logos': 'Logos', 'websites': 'Websites', 'pdf_editor': 'PDF Editor',
             'other': 'Custom Project'
         };
 
         const STUDENT_DISCOUNT = 0.2;
+        
+        // Currency conversion rates (relative to INR)
+        const CURRENCY_RATES = { 'INR': 1, 'USD': 0.012, 'EUR': 0.011, 'GBP': 0.0095 };
+        const CURRENCY_SYMBOLS = { 'INR': '₹', 'USD': '$', 'EUR': '€', 'GBP': '£' };
+        
+        let currentCurrency = 'INR';
+        let currentSymbol = '₹';
 
         let currentBooking = {
             id: null, name: '', email: '', phone: '', college: '',
@@ -2954,6 +3007,33 @@ div {
         let paymentVerified = false;
         let isFormSubmitted = false;
 
+        // Currency Functions
+        function toggleCurrencyDropdown() {
+            document.getElementById('currencyOptions').classList.toggle('show');
+        }
+        
+        function selectCurrency(currency, symbol) {
+            currentCurrency = currency;
+            currentSymbol = symbol;
+            document.getElementById('selectedCurrencyText').innerHTML = `💰 ${symbol} ${currency}`;
+            document.getElementById('currencyOptions').classList.remove('show');
+            updatePrice();
+            // Also update order summary currency display
+            const orderCurrencySpan = document.getElementById('orderCurrency');
+            if (orderCurrencySpan) orderCurrencySpan.textContent = currency;
+            const summaryCurrencySpan = document.getElementById('summaryCurrency');
+            if (summaryCurrencySpan) summaryCurrencySpan.textContent = currency;
+            showToast(`Currency changed to ${currency} (${symbol})`, 'success');
+        }
+        
+        function getConvertedPrice(priceINR) {
+            return Math.round(priceINR * CURRENCY_RATES[currentCurrency]);
+        }
+        
+        function getCurrencySymbol() {
+            return currentSymbol;
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('summaryDate').textContent = new Date().toLocaleDateString('en-US', {
@@ -2963,11 +3043,16 @@ div {
             document.addEventListener('click', function(event) {
                 const dropdown = document.getElementById('dropdownContent');
                 const button = document.getElementById('dropdownButton');
+                const currencyDropdown = document.getElementById('currencyOptions');
+                const currencyBtn = document.querySelector('.currency-select-btn');
                 if (!button.contains(event.target) && !dropdown.contains(event.target)) {
                     dropdown.classList.remove('show');
                     button.classList.remove('active');
                     document.querySelectorAll('.sub-dropdown').forEach(sub => sub.classList.remove('show'));
                     document.querySelectorAll('.dropdown-category').forEach(cat => cat.classList.remove('active'));
+                }
+                if (currencyBtn && !currencyBtn.contains(event.target) && !currencyDropdown.contains(event.target)) {
+                    currencyDropdown.classList.remove('show');
                 }
             });
             document.querySelectorAll('.form-control').forEach(input => {
@@ -3017,7 +3102,7 @@ div {
                 'bhim': `bhim://upi/pay?pa=${CREATOR_UPI_ID}&pn=Craft%20It&am=${amount}&cu=INR`
             };
             window.location.href = appLinks[selectedRedirectApp];
-            document.getElementById('paymentSuccessMessage').innerHTML = `Redirecting to ${selectedRedirectApp.toUpperCase()}...<br><br>Amount: ₹${amount.toLocaleString()}<br>Pay to: ${CREATOR_UPI_ID}`;
+            document.getElementById('paymentSuccessMessage').innerHTML = `Redirecting to ${selectedRedirectApp.toUpperCase()}...<br><br>Amount: ${getCurrencySymbol()}${getConvertedPrice(amount).toLocaleString()}<br>Pay to: ${CREATOR_UPI_ID}`;
             document.getElementById('paymentSuccessPopup').classList.add('active');
             setTimeout(() => {
                 window.location.href = `https://play.google.com/store/apps/details?id=com.google.android.apps.nbu.paisa.user`;
@@ -3042,7 +3127,7 @@ div {
             });
             subDropdown.classList.toggle('show');
             categoryEl.classList.toggle('active');
-            event.stopPropagation();
+            if(event) event.stopPropagation();
         }
 
         function selectService(serviceId, event) {
@@ -3055,13 +3140,13 @@ div {
                 currentBooking.selectedServices.push(serviceId);
                 dropdownItem.classList.add('selected');
                 const servicePopup = document.getElementById('servicePopup');
-                document.getElementById('servicePopupIcon').innerHTML = dropdownItem.querySelector('i').outerHTML;
+                document.getElementById('servicePopupIcon').innerHTML = dropdownItem.querySelector('.item-info i')?.outerHTML || '<i class="fas fa-cog"></i>';
                 document.getElementById('servicePopupTitle').innerHTML = SERVICE_NAMES[serviceId] || 'Service Selected';
-                document.getElementById('servicePopupMessage').innerHTML = `✅ ${SERVICE_NAMES[serviceId]} added to your cart. You can select more services!`;
+                document.getElementById('servicePopupMessage').innerHTML = `✅ ${SERVICE_NAMES[serviceId] || serviceId} added to your cart. You can select more services!`;
                 servicePopup.classList.add('active');
             }
             updateSelectedServicesTags();
-            if (currentBooking.selectedServices.includes('fullstack')) {
+            if (currentBooking.selectedServices.includes('fullstack') || currentBooking.selectedServices.includes('websites')) {
                 document.getElementById('backendLanguageSection').classList.add('visible');
             } else {
                 document.getElementById('backendLanguageSection').classList.remove('visible');
@@ -3081,7 +3166,7 @@ div {
                     const tag = document.createElement('span');
                     tag.className = 'service-tag';
                     if (serviceId === 'other') tag.classList.add('other-tag');
-                    tag.innerHTML = `${SERVICE_NAMES[serviceId]} <i class="fas fa-times" onclick="removeService('${serviceId}')"></i>`;
+                    tag.innerHTML = `${SERVICE_NAMES[serviceId] || serviceId} <i class="fas fa-times" onclick="removeService('${serviceId}')"></i>`;
                     tagsContainer.appendChild(tag);
                 });
             } else {
@@ -3093,13 +3178,15 @@ div {
             currentBooking.selectedServices = currentBooking.selectedServices.filter(s => s !== serviceId);
             document.querySelectorAll('.sub-dropdown-item').forEach(item => {
                 const itemName = item.querySelector('.item-info span')?.textContent;
-                if (itemName && itemName.includes(SERVICE_NAMES[serviceId])) item.classList.remove('selected');
+                if (itemName && itemName.includes(SERVICE_NAMES[serviceId] || serviceId)) item.classList.remove('selected');
             });
             updateSelectedServicesTags();
-            if (serviceId === 'fullstack' || !currentBooking.selectedServices.includes('fullstack')) {
-                document.getElementById('backendLanguageSection').classList.remove('visible');
-                currentBooking.backendLanguage = '';
-                document.querySelectorAll('.backend-option').forEach(opt => opt.classList.remove('selected'));
+            if (serviceId === 'fullstack' || serviceId === 'websites' || (!currentBooking.selectedServices.includes('fullstack') && !currentBooking.selectedServices.includes('websites'))) {
+                if (!currentBooking.selectedServices.includes('fullstack') && !currentBooking.selectedServices.includes('websites')) {
+                    document.getElementById('backendLanguageSection').classList.remove('visible');
+                    currentBooking.backendLanguage = '';
+                    document.querySelectorAll('.backend-option').forEach(opt => opt.classList.remove('selected'));
+                }
             }
             updatePrice();
         }
@@ -3118,17 +3205,19 @@ div {
                 if (SERVICE_PRICES[serviceId]) {
                     originalPrice += SERVICE_PRICES[serviceId];
                     if (servicesList) servicesList += ', ';
-                    servicesList += SERVICE_NAMES[serviceId];
+                    servicesList += SERVICE_NAMES[serviceId] || serviceId;
                 }
             });
-            if (currentBooking.selectedServices.includes('fullstack') && currentBooking.backendLanguage) {
+            if ((currentBooking.selectedServices.includes('fullstack') || currentBooking.selectedServices.includes('websites')) && currentBooking.backendLanguage) {
                 originalPrice += BACKEND_PRICES[currentBooking.backendLanguage] || 0;
                 servicesList += ` (${currentBooking.backendLanguage.toUpperCase()})`;
             }
             const discountedPrice = originalPrice * (1 - STUDENT_DISCOUNT);
             currentBooking.originalPrice = originalPrice;
             currentBooking.discountedPrice = discountedPrice;
-            document.getElementById('priceAmount').textContent = `₹${Math.round(discountedPrice).toLocaleString()}`;
+            
+            const convertedAmount = getConvertedPrice(discountedPrice);
+            document.getElementById('priceAmount').textContent = `${getCurrencySymbol()}${convertedAmount.toLocaleString()}`;
             document.getElementById('selectedServices').value = currentBooking.selectedServices.join(',');
             document.getElementById('selectedBackend').value = currentBooking.backendLanguage;
             document.getElementById('totalPrice').value = discountedPrice;
@@ -3158,7 +3247,7 @@ div {
                 case 'services':
                     icon.innerHTML = '<i class="fas fa-cogs"></i>';
                     title.innerHTML = 'Tech Services';
-                    message.innerHTML = 'We offer Website Dev, Dashboard Creation, Presentations, Essays, and Content Generation. All with 20% student discount!';
+                    message.innerHTML = 'We offer Website Dev, Dashboard Creation, Presentations, Essays, Content Generation, Digital Design, Print Design, AI Tools, Video Editing and much more! All with 20% student discount!';
                     break;
                 case 'offers':
                     icon.innerHTML = '<i class="fas fa-graduation-cap"></i>';
@@ -3227,17 +3316,20 @@ div {
                 let servicesList = '';
                 currentBooking.selectedServices.forEach(serviceId => {
                     if (servicesList) servicesList += ', ';
-                    servicesList += SERVICE_NAMES[serviceId];
+                    servicesList += SERVICE_NAMES[serviceId] || serviceId;
                 });
-                if (currentBooking.selectedServices.includes('fullstack') && currentBooking.backendLanguage) {
+                if ((currentBooking.selectedServices.includes('fullstack') || currentBooking.selectedServices.includes('websites')) && currentBooking.backendLanguage) {
                     servicesList += ` (${currentBooking.backendLanguage.toUpperCase()})`;
                 }
                 document.getElementById('orderServices').textContent = servicesList;
                 document.getElementById('orderBackend').textContent = currentBooking.backendLanguage ? currentBooking.backendLanguage.toUpperCase() : 'N/A';
-                document.getElementById('orderSubtotal').textContent = `₹${Math.round(currentBooking.originalPrice).toLocaleString()}`;
-                document.getElementById('orderTotal').textContent = `₹${Math.round(currentBooking.discountedPrice).toLocaleString()}`;
-                document.getElementById('instructionAmount').textContent = Math.round(currentBooking.discountedPrice).toLocaleString();
-                document.getElementById('upiAmount').textContent = Math.round(currentBooking.discountedPrice).toLocaleString();
+                document.getElementById('orderCurrency').textContent = currentCurrency;
+                const convertedSubtotal = getConvertedPrice(currentBooking.originalPrice);
+                const convertedTotal = getConvertedPrice(currentBooking.discountedPrice);
+                document.getElementById('orderSubtotal').textContent = `${getCurrencySymbol()}${convertedSubtotal.toLocaleString()}`;
+                document.getElementById('orderTotal').textContent = `${getCurrencySymbol()}${convertedTotal.toLocaleString()}`;
+                document.getElementById('instructionAmount').textContent = `${getCurrencySymbol()}${convertedTotal.toLocaleString()}`;
+                document.getElementById('upiAmount').textContent = `${getCurrencySymbol()}${convertedTotal.toLocaleString()}`;
                 goToStep(2);
                 showToast('Order created! Choose your payment method', 'success');
             } catch (error) { showToast('Error creating order. Please try again.', 'error'); }
@@ -3264,8 +3356,8 @@ div {
                 if (!input.value.trim()) { input.classList.add('error'); isValid = false; }
             });
             if (currentBooking.selectedServices.length === 0) { showToast('Please select at least one service', 'warning'); isValid = false; }
-            if (currentBooking.selectedServices.includes('fullstack') && !currentBooking.backendLanguage) {
-                showToast('Please select a backend language for Full Stack Website', 'warning'); isValid = false;
+            if ((currentBooking.selectedServices.includes('fullstack') || currentBooking.selectedServices.includes('websites')) && !currentBooking.backendLanguage) {
+                showToast('Please select a backend language for Website projects', 'warning'); isValid = false;
             }
             const email = document.getElementById('email');
             if (email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { email.classList.add('error'); isValid = false; }
@@ -3297,9 +3389,9 @@ div {
                 let servicesList = '';
                 currentBooking.selectedServices.forEach(serviceId => {
                     if (servicesList) servicesList += ', ';
-                    servicesList += SERVICE_NAMES[serviceId];
+                    servicesList += SERVICE_NAMES[serviceId] || serviceId;
                 });
-                if (currentBooking.selectedServices.includes('fullstack') && currentBooking.backendLanguage) {
+                if ((currentBooking.selectedServices.includes('fullstack') || currentBooking.selectedServices.includes('websites')) && currentBooking.backendLanguage) {
                     servicesList += ` (${currentBooking.backendLanguage.toUpperCase()})`;
                 }
                 document.getElementById('summaryName').textContent = currentBooking.name;
@@ -3308,7 +3400,9 @@ div {
                 document.getElementById('summaryCollege').textContent = currentBooking.college || 'Not provided';
                 document.getElementById('summaryServices').textContent = servicesList;
                 document.getElementById('summaryBackend').textContent = currentBooking.backendLanguage ? currentBooking.backendLanguage.toUpperCase() : 'N/A';
-                document.getElementById('summaryAmount').textContent = `₹${Math.round(currentBooking.discountedPrice).toLocaleString()}`;
+                document.getElementById('summaryCurrency').textContent = currentCurrency;
+                const convertedTotal = getConvertedPrice(currentBooking.discountedPrice);
+                document.getElementById('summaryAmount').textContent = `${getCurrencySymbol()}${convertedTotal.toLocaleString()}`;
                 document.getElementById('summaryPaymentId').textContent = paymentId;
                 document.getElementById('summaryUserUpi').textContent = userSavedUpiId || 'Not provided';
                 document.getElementById('summaryPaymentMethod').textContent = selectedPaymentMethod === 'qr' ? 'QR Code' : (selectedRedirectApp ? selectedRedirectApp.toUpperCase() : 'UPI App');
@@ -3316,7 +3410,7 @@ div {
                     orderId: currentOrder.id, paymentId, customerName: currentBooking.name, customerEmail: currentBooking.email,
                     customerPhone: currentBooking.phone, customerCollege: currentBooking.college || 'Not provided',
                     selectedServices: servicesList, backendLanguage: currentBooking.backendLanguage || 'N/A',
-                    description: currentBooking.description, amount: currentBooking.discountedPrice,
+                    description: currentBooking.description, amount: currentBooking.discountedPrice, currency: currentCurrency,
                     bookingDate: new Date().toLocaleString(), paymentMethod: selectedPaymentMethod === 'qr' ? 'QR Code' : (selectedRedirectApp ? selectedRedirectApp : 'UPI'),
                     userUpiId: userSavedUpiId || 'Not provided', creatorUpiId: CREATOR_UPI_ID
                 };
@@ -3412,8 +3506,8 @@ div {
             yPos += 8;
             let servicesText = '';
             currentBooking.selectedServices.forEach((serviceId, index) => {
-                servicesText += `${index + 1}. ${SERVICE_NAMES[serviceId]}`;
-                if (serviceId === 'fullstack' && currentBooking.backendLanguage) servicesText += ` (${currentBooking.backendLanguage.toUpperCase()})`;
+                servicesText += `${index + 1}. ${SERVICE_NAMES[serviceId] || serviceId}`;
+                if ((serviceId === 'fullstack' || serviceId === 'websites') && currentBooking.backendLanguage) servicesText += ` (${currentBooking.backendLanguage.toUpperCase()})`;
                 servicesText += '\n';
             });
             doc.setFontSize(10);
@@ -3434,7 +3528,7 @@ div {
                 yPos += (descLines.length * 5) + 10;
             }
             doc.setFillColor(249, 250, 251);
-            doc.rect(20, yPos - 5, 170, 60, 'F');
+            doc.rect(20, yPos - 5, 170, 65, 'F');
             doc.setFontSize(12);
             doc.setFont("helvetica", "bold");
             doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
@@ -3447,14 +3541,21 @@ div {
             doc.text("Original Price:", 25, yPos);
             doc.text("Student Discount (20%):", 25, yPos + 6);
             doc.text("Total Paid:", 25, yPos + 12);
+            doc.text("Currency:", 25, yPos + 18);
             doc.setFont("helvetica", "normal");
             doc.setTextColor(0, 0, 0);
-            doc.text(`₹${Math.round(currentBooking.originalPrice).toLocaleString()}`, 120, yPos);
-            doc.text(`-₹${Math.round(currentBooking.originalPrice * 0.2).toLocaleString()}`, 120, yPos + 6);
+            const convertedOriginal = getConvertedPrice(currentBooking.originalPrice);
+            const convertedDiscount = getConvertedPrice(currentBooking.originalPrice * 0.2);
+            const convertedTotal = getConvertedPrice(currentBooking.discountedPrice);
+            doc.text(`${getCurrencySymbol()}${convertedOriginal.toLocaleString()}`, 120, yPos);
+            doc.text(`-${getCurrencySymbol()}${convertedDiscount.toLocaleString()}`, 120, yPos + 6);
             doc.setFont("helvetica", "bold");
             doc.setTextColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
-            doc.text(`₹${Math.round(currentBooking.discountedPrice).toLocaleString()}`, 120, yPos + 12);
-            yPos += 20;
+            doc.text(`${getCurrencySymbol()}${convertedTotal.toLocaleString()}`, 120, yPos + 12);
+            doc.setFont("helvetica", "normal");
+            doc.setTextColor(0, 0, 0);
+            doc.text(currentCurrency, 120, yPos + 18);
+            yPos += 28;
             doc.setFontSize(9);
             doc.setFont("helvetica", "normal");
             doc.setTextColor(75, 85, 99);
@@ -3476,17 +3577,17 @@ div {
             doc.setFont("helvetica", "normal");
             doc.text("Your work will begin within 24 hours.", 105, 287, { align: 'center' });
             doc.setFillColor(whatsappColor[0], whatsappColor[1], whatsappColor[2]);
-            doc.rect(20, 250, 170, 12, 'F');
+            doc.rect(20, 255, 170, 12, 'F');
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(9);
             doc.setFont("helvetica", "bold");
-            doc.text(`Send this receipt to WhatsApp: +91 ${WHATSAPP_NUMBER}`, 105, 258, { align: 'center' });
+            doc.text(`Send this receipt to WhatsApp: +91 ${WHATSAPP_NUMBER}`, 105, 263, { align: 'center' });
             doc.setTextColor(200, 200, 200);
             doc.setFontSize(8);
             doc.text(`Creator: +91 ${CREATOR_PHONE} | ${CREATOR_EMAIL}`, 105, 295, { align: 'center' });
             doc.setDrawColor(primaryColor[0], primaryColor[1], primaryColor[2]);
             doc.setLineWidth(0.2);
-            doc.rect(5, 5, 200, 287);
+            doc.rect(5, 5, 200, 292);
             doc.save(`CraftIt_Receipt_${currentOrder?.id || Date.now()}.pdf`);
             showToast('PDF Receipt downloaded successfully!', 'success');
             closePopup('pdfReceiptPopup');
@@ -3526,6 +3627,11 @@ div {
             document.getElementById('payment-qr').classList.add('active');
             document.getElementById('payment-upi').classList.remove('active');
             document.querySelectorAll('.redirect-option').forEach(opt => opt.classList.remove('selected'));
+            // Reset currency to INR
+            currentCurrency = 'INR';
+            currentSymbol = '₹';
+            document.getElementById('selectedCurrencyText').innerHTML = '💰 ₹ INR';
+            updatePrice();
             goToStep(1);
         }
 
@@ -3544,8 +3650,8 @@ div {
         function copyUPIId() { navigator.clipboard.writeText(CREATOR_UPI_ID).then(() => showToast('Creator UPI ID copied!', 'success')); }
         function shareBooking() {
             let servicesList = '';
-            currentBooking.selectedServices.forEach(serviceId => { if (servicesList) servicesList += ', '; servicesList += SERVICE_NAMES[serviceId]; });
-            if (currentBooking.selectedServices.includes('fullstack') && currentBooking.backendLanguage) servicesList += ` (${currentBooking.backendLanguage.toUpperCase()})`;
+            currentBooking.selectedServices.forEach(serviceId => { if (servicesList) servicesList += ', '; servicesList += SERVICE_NAMES[serviceId] || serviceId; });
+            if ((currentBooking.selectedServices.includes('fullstack') || currentBooking.selectedServices.includes('websites')) && currentBooking.backendLanguage) servicesList += ` (${currentBooking.backendLanguage.toUpperCase()})`;
             if (navigator.share) {
                 navigator.share({ title: 'Craft It Project Booking', text: `I just booked ${servicesList} on Craft It!`, url: window.location.href })
                     .then(() => showToast('Shared!', 'success')).catch(() => showToast('Cancelled', 'warning'));
@@ -3554,12 +3660,21 @@ div {
         function callCreator() { window.location.href = `tel:+91${CREATOR_PHONE}`; }
         function emailCreator() {
             let servicesList = '';
-            currentBooking.selectedServices.forEach(serviceId => { if (servicesList) servicesList += ', '; servicesList += SERVICE_NAMES[serviceId]; });
-            if (currentBooking.selectedServices.includes('fullstack') && currentBooking.backendLanguage) servicesList += ` (${currentBooking.backendLanguage.toUpperCase()})`;
+            currentBooking.selectedServices.forEach(serviceId => { if (servicesList) servicesList += ', '; servicesList += SERVICE_NAMES[serviceId] || serviceId; });
+            if ((currentBooking.selectedServices.includes('fullstack') || currentBooking.selectedServices.includes('websites')) && currentBooking.backendLanguage) servicesList += ` (${currentBooking.backendLanguage.toUpperCase()})`;
             const subject = encodeURIComponent('New Project Booking Inquiry');
             const body = encodeURIComponent(`Hello Creator,\n\nI have a question about my project booking.\n\nName: ${currentBooking.name}\nPhone: ${currentBooking.phone}\nServices: ${servicesList}\nCreator UPI: ${CREATOR_UPI_ID}\nMy UPI: ${userSavedUpiId || 'Not provided'}`);
             window.location.href = `mailto:${CREATOR_EMAIL}?subject=${subject}&body=${body}`;
         }
+        
+        // Close currency dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const currencyDropdown = document.getElementById('currencyOptions');
+            const currencyBtn = document.querySelector('.currency-select-btn');
+            if (currencyBtn && !currencyBtn.contains(event.target) && currencyDropdown && !currencyDropdown.contains(event.target)) {
+                currencyDropdown.classList.remove('show');
+            }
+        });
     </script>
 </body>
-  </html>
+</html>
